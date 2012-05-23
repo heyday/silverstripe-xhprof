@@ -52,11 +52,13 @@ class HeydayXhprof
 
 			$xhprof_runs = new XHProfRuns_Default();
 
-			$run_id = $xhprof_runs->save_run($xhprof_data, $appName);
+			$app = HeydayXhprofApp::get($appName);
+
+			$run_id = $xhprof_runs->save_run($xhprof_data, $app->SafeName());
 
 			$xhprofRun = new HeydayXhprofRun(array(
 				'Run' => $run_id,
-				'AppID' => HeydayXhprofApp::get($appName)->ID,
+				'AppID' => $app->ID,
 				'Url' => isset($_GET['url']) ? $_GET['url'] : false
 			));
 

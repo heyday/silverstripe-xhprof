@@ -57,4 +57,19 @@ class HeydayXhprofApp extends DataObject
 
 	}
 
+	public function SafeName()
+	{
+
+		$t = (function_exists('mb_strtolower')) ? mb_strtolower($this->Name) : strtolower($this->Name);
+		$t = Object::create('Transliterator')->toASCII($t);
+		$t = str_replace('&amp;','-and-',$t);
+		$t = str_replace('&','-and-',$t);
+		$t = ereg_replace('[^A-Za-z0-9]+','-',$t);
+		$t = ereg_replace('-+','-',$t);
+		$t = trim($t, '-');
+
+		return $t;
+
+	}
+
 }

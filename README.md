@@ -12,6 +12,29 @@ To install just drop the heyday-xhprof directory into your SilverStripe root and
 
 ##How to use
 
+You can use HeydayXhprof in two ways. As a global profiler or as a profiler of specific segments of code.
+
+To make HeydayXhprof profile all requests to silverstripe, from your web root (or sapphire) directory run
+
+	./sake xhprof/globalprofile/enable
+
+To disable global profiling run:
+
+	./sake xhprof/globalprofile/disable
+
+To profile a specific segment of code you need to first ensure global profiling is disabled, and then you need to set up the requisite HeydayXhprof::start() and HeydayXhprof::end() calls.
+
+##Examples
+	
+	HeydayXhprof::start('PotentiallyTroublesomeWhileLoop');
+
+	while (true) {
+
+		//some code that could run slow
+
+	}
+
+	HeydayXhprof::end();
 
 ##Sources:
 
