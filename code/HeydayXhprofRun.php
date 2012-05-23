@@ -4,15 +4,12 @@ class HeydayXhprofRun extends DataObject
 {
 
 	static $db = array(
-		'Run' => 'Varchar(255)'
+		'Run' => 'Varchar(255)',
+		'Url' => 'Text'
 	);
 
 	static $has_one = array(
 		'App' => 'HeydayXhprofApp'
-	);
-
-	static $summary_fields = array(
-		'Run' => 'Run ID'
 	);
 
 	static $default_sort = 'Created DESC';

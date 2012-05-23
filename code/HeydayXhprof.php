@@ -56,10 +56,9 @@ class HeydayXhprof
 
 			$xhprofRun = new HeydayXhprofRun(array(
 				'Run' => $run_id,
-				'AppID' => HeydayXhprofApp::get($appName)->ID 
+				'AppID' => HeydayXhprofApp::get($appName)->ID,
+				'Url' => isset($_GET['url']) ? $_GET['url'] : false
 			));
-
-			// $xhprofRun->AppID = HeydayXhprofApp::get($appName)->ID;
 
 			$xhprofRun->write();
 
