@@ -12,6 +12,12 @@ class HeydayXhprof
 
 		if (extension_loaded('xhprof')) {
 
+			if (self::$started) {
+
+				user_error("You have already started xhprof");
+
+			}
+
 			require_once dirname(__FILE__) . '/ThirdParty/xhprof_lib/utils/xhprof_lib.php';
 			require_once dirname(__FILE__) . '/ThirdParty/xhprof_lib/utils/xhprof_runs.php';
 
@@ -40,19 +46,20 @@ class HeydayXhprof
 
 			}
 
-			$profiler_namespace = self::get_app_name();
+			$appName = self::get_app_name();
 
 			$xhprof_data = xhprof_disable();
 
 			$xhprof_runs = new XHProfRuns_Default();
 
-			$run_id = $xhprof_runs->save_run($xhprof_data, $profiler_namespace);
+			$run_id = $xhprof_runs->save_run($xhprof_data, $appName);
 
 			$xhprofRun = new HeydayXhprofRun(array(
-				'Run' => $run_id
+				'Run' => $run_id,
+				'AppID' => HeydayXhprofApp::get($appName)->ID 
 			));
 
-			$xhprofRun->AppID = HeydayXhprofApp::get($profiler_namespace)->ID;
+			// $xhprofRun->AppID = HeydayXhprofApp::get($appName)->ID;
 
 			$xhprofRun->write();
 
