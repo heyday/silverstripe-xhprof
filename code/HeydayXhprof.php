@@ -6,6 +6,41 @@ class HeydayXhprof
 	static protected $default_flags = false;
 	static protected $app_name = false;
 	static protected $started = false;
+	static protected $exclusions = array(
+		'xhprof_html'
+	);
+
+
+	public static function add_exclusion($exclusion)
+	{
+
+		self::$exclusions[] = $exclusion;
+
+	}
+
+	public static function add_exclusions(array $exclusions)
+	{
+
+		self::$exclusions = array_merge(self::$exclusions, $exclusions);
+		
+	}
+
+	public static function is_allowed($url)
+	{
+
+		foreach (self::$exclusions as $exclusion) {
+
+			if (strpos($url, $exclusion) !== false) {
+
+				return false;
+
+			}
+
+		}
+
+		return true;
+
+	}
 
 	public static function start($app_name = false, $flags = false)
 	{
