@@ -20,10 +20,8 @@ class HeydayXhprofRun extends DataObject
 	public function View()
 	{
 
-		$source = $this->App()->Name;
-
 		return <<<LINK
-<a href="/xhprof/?run=$this->Run&source=$source&sort=wt" target="_blank">View</a>
+<a href="/heyday-xhprof/code/ThirdParty/xhprof_html/index.php?run=$this->Run&source={$this->App()->Name}&sort=wt" target="_blank">View</a>
 LINK;
 
 	}

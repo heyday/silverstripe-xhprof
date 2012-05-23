@@ -46,7 +46,8 @@ class HeydayXhprofApp extends DataObject
 			array(
 				'Run' => 'Run ID',
 				'View' => 'View'
-			)
+			),
+			"AppID = '$this->ID'"
 		));
 
 		$runs->setShowPagination(true);

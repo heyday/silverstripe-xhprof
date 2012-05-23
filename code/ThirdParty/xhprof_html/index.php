@@ -56,7 +56,7 @@ xhprof_param_init($params);
    to be preserved for the next page. unset all unwanted keys in $params.
  */
 foreach ($params as $k => $v) {
-  $params[$k] = $GLOBALS[$k];
+  $params[$k] = $$k;
 
   // unset key from params that are using default values. So URLs aren't
   // ridiculously long.
@@ -68,8 +68,8 @@ foreach ($params as $k => $v) {
 echo "<html>";
 
 echo "<head><title>XHProf: Hierarchical Profiler Report</title>";
-xhprof_include_js_css('/heyday-xhprof/code/ThirdParty/xhprof_html');
-echo "<base href='/xhprof'/></head>";
+xhprof_include_js_css();
+echo "</head>";
 
 echo "<body>";
 
@@ -82,8 +82,8 @@ $vgbar = ' class="vgbar"';
 
 $xhprof_runs_impl = new XHProfRuns_Default();
 
-displayXHProfReport($xhprof_runs_impl, $params, $GLOBALS['source'], $GLOBALS['run'], $GLOBALS['wts'],
-                    $GLOBALS['symbol'], $GLOBALS['sort'], $GLOBALS['run1'], $GLOBALS['run2']);
+displayXHProfReport($xhprof_runs_impl, $params, $source, $run, $wts,
+                    $symbol, $sort, $run1, $run2);
 
 
 echo "</body>";

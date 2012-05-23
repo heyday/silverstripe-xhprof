@@ -42,9 +42,7 @@ include_once $GLOBALS['XHPROF_LIB_ROOT'].'/utils/xhprof_runs.php';
  * Our coding convention disallows relative paths in hrefs.
  * Get the base URL path from the SCRIPT_NAME.
  */
-global $base_path;
-$base_path = '/xhprof';
-
+$base_path = rtrim(dirname($_SERVER['SCRIPT_NAME']), "/");
 
 /**
  * Generate references to required stylesheets & javascript.
@@ -213,7 +211,6 @@ $diff_mode = false;
 $display_calls = true;
 
 // The following column headers are sortable
-global $sortable_columns;
 $sortable_columns = array("fn" => 1,
                           "ct" => 1,
                           "wt" => 1,

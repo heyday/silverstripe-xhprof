@@ -7,16 +7,23 @@ class HeydayXhprof
 	static protected $app_name = false;
 	static protected $started = false;
 
-	public static function start($flags = false)
+	public static function start($app_name = false, $flags = false)
 	{
 
 		if (extension_loaded('xhprof')) {
 
 			require_once dirname(__FILE__) . '/ThirdParty/xhprof_lib/utils/xhprof_lib.php';
 			require_once dirname(__FILE__) . '/ThirdParty/xhprof_lib/utils/xhprof_runs.php';
+
 			xhprof_enable($flags !== false ? $flags : self::get_default_flags());
 
 			self::$started = true;
+
+			if ($app_name) {
+
+				self::set_app_name($app_name);
+
+			}
 
 		}
 
@@ -25,13 +32,13 @@ class HeydayXhprof
 	public static function end()
 	{
 
-		if (!self::$started) {
-
-			user_error("You haven't started a profile");
-
-		}
-
 		if (extension_loaded('xhprof')) {
+
+			if (!self::$started) {
+
+				user_error("You haven't started a profile");
+
+			}
 
 			$profiler_namespace = self::get_app_name();
 

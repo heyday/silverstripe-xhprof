@@ -1,3 +1,13 @@
-<FilesMatch "\.(php|php3|php4|php5|phtml|inc)$">
-	Deny from all
-</FilesMatch>
+php_flag register_globals on
+
+<IfModule mod_rewrite.c>
+	SetEnv HTTP_MOD_REWRITE On
+	RewriteEngine On
+	RewriteBase /
+
+	RewriteCond %{REMOTE_HOST} !^127\.0\.0\.1
+	RewriteRule .* / [R=302,L]
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule heyday-xhprof/code/ThirdParty/xhprof_html/ heyday-xhprof/code/ThirdParty/xhprof_html/index.php?%{QUERY_STRING} [L]
+</IfModule>
