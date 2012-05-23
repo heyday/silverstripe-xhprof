@@ -56,11 +56,63 @@ class HeydayXhprof
 
 			$run_id = $xhprof_runs->save_run($xhprof_data, $app->SafeName());
 
-			$xhprofRun = new HeydayXhprofRun(array(
-				'Run' => $run_id,
-				'AppID' => $app->ID,
-				'Url' => isset($_GET['url']) ? $_GET['url'] : false
-			));
+			if (class_exists('ClassInfo') && ClassInfo::exists('HeydayXhprofRun')) {
+
+				//Copied from Director::direct
+				if (isset($_GET['url'])) {
+					$url = $_GET['url'];
+					// IIS includes get variables in url
+					$i = strpos($url, '?');
+					if($i !== false) {
+						$url = substr($url, 0, $i);
+					}
+					
+				// Lighttpd uses this
+				} else {
+					if(strpos($_SERVER['REQUEST_URI'],'?') !== false) {
+						list($url, $query) = explode('?', $_SERVER['REQUEST_URI'], 2);
+						parse_str($query, $_GET);
+						if ($_GET) $_REQUEST = array_merge((array)$_REQUEST, (array)$_GET);
+					} else {
+						$url = $_SERVER["REQUEST_URI"];
+					}
+				}
+
+				$request = new SS_HTTPRequest(
+					(isset($_SERVER['X-HTTP-Method-Override'])) ? $_SERVER['X-HTTP-Method-Override'] : $_SERVER['REQUEST_METHOD'],
+					$url, 
+					$_GET, 
+					array_merge((array)$_POST, (array)$_FILES),
+					@file_get_contents('php://input')
+				);
+
+				if ($request instanceof SS_HTTPRequest) {
+
+					$requestVars = $request->requestVars();
+					unset($requestVars['url']);
+
+					$xhprofRun = new HeydayXhprofRun(array(
+						'Run' => $run_id,
+						'AppID' => $app->ID,
+						'Url' => $request->getURL(),
+						'Method' => $request->httpMethod(),
+						'IP' => $request->getIP(),
+						'Params' => http_build_query($request->allParams(), '', "\n"),
+						'RequestVars' => http_build_query($requestVars, '', "\n"),
+						'RequestBody' => $request->getBody()
+					));
+
+				} else {
+
+					$xhprofRun = new HeydayXhprofRun(array(
+						'Run' => $run_id,
+						'AppID' => $app->ID,
+						'Url' => isset($_GET['url']) ? $_GET['url'] : false
+					));
+
+				}
+
+			}
 
 			$xhprofRun->write();
 
@@ -107,6 +159,13 @@ class HeydayXhprof
 	{
 
 		self::$app_name = $app_name;
+
+	}
+
+	public static function is_started()
+	{
+
+		return self::$started;
 
 	}
 

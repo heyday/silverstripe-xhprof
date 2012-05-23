@@ -44,9 +44,14 @@ class HeydayXhprofApp extends DataObject
 			'Runs',
 			'HeydayXhprofRun',
 			array(
+				'View' => 'View',
 				'Url' => 'Url',
 				'Run' => 'Run ID',
-				'View' => 'View'
+				'Method' => 'Method',
+				'IP' => 'IP',
+				'Params' => 'Params',
+				'RequestVars' => 'RequestVars',
+				'RequestBody' => 'RequestBody'
 			),
 			"AppID = '$this->ID'"
 		));

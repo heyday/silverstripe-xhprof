@@ -1,3 +1,7 @@
 <?php
 
-HeydayXhprof::end();
+if (HeydayXhprof::is_started()) {
+
+	HeydayXhprof::end();
+	
+}

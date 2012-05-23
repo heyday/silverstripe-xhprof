@@ -5,7 +5,12 @@ class HeydayXhprofRun extends DataObject
 
 	static $db = array(
 		'Run' => 'Varchar(255)',
-		'Url' => 'Text'
+		'Url' => 'Text',
+		'Method' => "Enum('GET,POST,PUT,DELETE','GET')",
+		'IP' => 'Varchar(64)',
+		'Params' => 'Text',
+		'RequestVars' => 'Text',
+		'RequestBody' => 'Text'
 	);
 
 	static $has_one = array(
