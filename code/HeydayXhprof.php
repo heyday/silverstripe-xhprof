@@ -21,12 +21,18 @@ class HeydayXhprof
 
 	}
 
-	public static function test_probability()
+	public static function test_probability($probability = null)
 	{
 
-		$unit = pow(10, strlen(self::$probability - (int) self::$probability) - 1);
+		if (!$probability) {
 
-		return mt_rand(1, $unit / self::$probability) <= $unit;
+			$probability = self::$probability;
+			
+		}
+
+		$unit = pow(10, strlen($probability - (int) $probability) - 1);
+
+		return mt_rand(1, $unit / $probability) <= $unit;
 
 	}
 
@@ -161,6 +167,8 @@ class HeydayXhprof
 			}
 
 			$xhprofRun->write();
+
+			self::$started = false;
 
 		}
 

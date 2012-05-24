@@ -1,18 +1,18 @@
 #Heyday xhprof
 
-This module provides a silverstripe-centric wrapper for the the pecl package [xhprof](http://pecl.php.net/package/xhprof) and the [xhprof gui](https://github.com/facebook/xhprof).
+This module provides a SilverStripe-centric wrapper for the pecl package [xhprof](http://pecl.php.net/package/xhprof) and the [xhprof gui](https://github.com/facebook/xhprof).
 
 ##Requirements
 
-You will require [xhprof](http://pecl.php.net/package/xhprof) to use heyday-xhprof
+You will require [xhprof](http://pecl.php.net/package/xhprof) installed in php to use `heyday-xhprof`.
 
 ##Installation
 
-To install just drop the heyday-xhprof directory into your SilverStripe root and run /dev/build?flush=1
+To install drop the `heyday-xhprof` directory into your SilverStripe root and run `/dev/build?flush=1`.
 
 ##How to use
 
-You can use HeydayXhprof in two ways. As a global profiler or as a profiler of specific segments of code.
+You can use `heyday-xhprof` in two ways. As a global profiler or as a profiler of specific segments of code. Please note, you can't do both global profiling and local profiling in the same request.
 
 ###Global Profiling
 
@@ -36,31 +36,65 @@ Disable:
 
 	http://localhost/xhprof/globalprofile/disable
 	
+Enabling global profiling edits your `.htaccess` file by adding two lines of code to the beginning, but `heyday-xhprof` makes a backup of your `.htaccess` which can be found in `heyday-xhprof/code/GlobalProfile/backup/`.
+
+When you disable global profiling your `.htaccess` file will be restored from the backup.
+	
 ###Local Profiling
 
-To profile a specific segment of code you need to first ensure global profiling is disabled, and then you need to set up the requisite HeydayXhprof::start() and HeydayXhprof::end() calls.
+To profile a specific segment of code you need to first ensure global profiling is disabled, and then you need to set up the requisite `HeydayXhprof::start()` and `HeydayXhprof::end()` calls.
 	
-	HeydayXhprof::start('Potentially Troublesome While Loop');
+	HeydayXhprof::start('Potentially Troublesome Code');
 
-	while (true) {
-
-		//some code that could run slow
-
-	}
+	//Code to profile
 
 	HeydayXhprof::end();
 	
+##Viewing saved profiles
+
+For each profile made, there is a corresponding database record (`HeydayXhprofRun`) created. These database records store information about the request (url, query string etc) that the profiling occured on, and also the identifier to the profile.
+
+To view profiles saved go to:
+
+	http://localhost/admin/xhprof/
+	
+All global profiles are saved under the `App` name of `Global`.
+	
 ##Configuation
 
-There are a couple of configuation options used for global profiling. These config options should be set in a php file located at:
+There are a couple of configuation options available when profiling. Global config options can be set in a php file located at:
 
 	./mysite/_config_xhprof.php
 	
+When global profiling is enabled, this file (if it exists) is included before any `SilverStripe` code is included.
+	
 ###Limiting global profiling by probability
 
-To limit requests profiled you can use a probability.
+To limit requests profiled you can use a probability. This useful for profiling on live server under load.
 
 	HeydayXhprof::set_probability(2/3);
+	
+This example would make the probability of a profile being made `2 in 3`
+
+	HeydayXhprof::set_probability(1/1000);
+
+This example would make the probability of a profile being made `1 in 1000`
+
+###Limiting local profiling by probability
+
+	if (HeydayXhprof::test_probability(1/100)) {
+	
+		HeydayXhprof::start('Potentially Troublesome Code');
+	
+	}
+
+	//Code to profile
+	
+	if (HeydayXhprof::is_started()) {
+
+		HeydayXhprof::end();
+	
+	}
 	
 ###Excluding urls by partial matching (specifically strpos)
 
@@ -114,4 +148,8 @@ Installing xhprof with MAMP on OSX
 	make install
 
 
-Then enable xhprof in php.ini
+Then enable xhprof in `php.ini` make sure you create a tmp directory for xhprof.
+
+	[xhprof]
+	extension="/Applications/MAMP/bin/php/php5.3.6/lib/php/extensions/no-debug-non-zts-20090626/xhprof.so"
+	xhprof.output_dir="/Applications/MAMP/tmp/xhprof"
