@@ -40,6 +40,8 @@ class HeydayXhprofApp extends DataObject
 			)
 		);
 
+		$fields->addFieldToTab('Root.Main', new LiteralField('RemoveMissing', "<p><button class='action'><a href='/xhprof/removemissing/$this->ID' style='color: inherit; text-decoration: inherit;'>Remove records with missing profile dumps</a></button><p>"));
+
 		$fields->addFieldToTab('Root.Main', $runs = new TableListField(
 			'Runs',
 			'HeydayXhprofRun',

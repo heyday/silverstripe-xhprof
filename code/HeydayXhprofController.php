@@ -4,7 +4,7 @@ class HeydayXhprofController extends Controller
 {
 
 	static $url_segment = 'xhprof';
-	static $allowed_actions = array('globalprofile');
+	static $allowed_actions = array('globalprofile', 'removemissing');
 
 	public function init()
 	{
@@ -26,10 +26,20 @@ class HeydayXhprofController extends Controller
 		echo implode(PHP_EOL, array(
 			'Commands available:',
 			'sake xhprof/globalprofile/enable',
-			'sake xhprof/globalprofile/disable'
+			'sake xhprof/globalprofile/disable',
+			'sake xhprof/removemissingprofiles'
 		)), PHP_EOL;
 
 		exit;
+
+	}
+
+	public function removemissing($request)
+	{
+
+		HeydayXhprof::remove_missing($request->param('ID') ? $request->param('ID') : null);
+
+		Director::redirectBack();
 
 	}
 

@@ -223,4 +223,33 @@ class HeydayXhprof
 
 	}
 
+	public static function remove_missing($appID = null)
+	{
+
+		$dir = realpath(ini_get("xhprof.output_dir"));
+
+		if ($dir) {
+
+			$runs = $appID ? DataObject::get('HeydayXhprofRun', "AppID = '$appID'") : DataObject::get('HeydayXhprofRun');
+
+			if ($runs instanceof DataObjectSet) {
+
+				foreach ($runs as $run) {
+
+					$filename = $dir . '/' . $run->Run . '.' . $run->App()->SafeName();
+
+					if (!file_exists($filename)) {
+
+						$run->delete();
+
+					}
+
+				}
+
+			}
+
+		}
+
+	}
+
 }
