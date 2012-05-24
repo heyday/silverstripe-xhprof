@@ -6,10 +6,29 @@ class HeydayXhprof
 	static protected $default_flags = false;
 	static protected $app_name = false;
 	static protected $started = false;
+	static protected $probability = 1;
 	static protected $exclusions = array(
 		'xhprof_html'
 	);
 
+	/**
+	 * Should be a from 0 to 1 inclusive
+	 */
+	public static function set_probability($probability)
+	{
+
+		self::$probability = max(min(1, $probability), 0);
+
+	}
+
+	public static function test_probability()
+	{
+
+		$unit = pow(10, strlen(self::$probability - (int) self::$probability) - 1);
+
+		return mt_rand(1, $unit / self::$probability) <= $unit;
+
+	}
 
 	public static function add_exclusion($exclusion)
 	{
@@ -38,7 +57,7 @@ class HeydayXhprof
 
 		}
 
-		return true;
+		return self::test_probability();
 
 	}
 
@@ -135,14 +154,6 @@ class HeydayXhprof
 						'Params' => http_build_query($request->allParams(), '', "\n"),
 						'RequestVars' => http_build_query($requestVars, '', "\n"),
 						'RequestBody' => $request->getBody()
-					));
-
-				} else {
-
-					$xhprofRun = new HeydayXhprofRun(array(
-						'Run' => $run_id,
-						'AppID' => $app->ID,
-						'Url' => isset($_GET['url']) ? $_GET['url'] : false
 					));
 
 				}
