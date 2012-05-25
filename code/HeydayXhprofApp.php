@@ -47,6 +47,7 @@ class HeydayXhprofApp extends DataObject
 			'HeydayXhprofRun',
 			array(
 				'View' => 'View',
+				'Created' => 'Created',
 				'Url' => 'Url',
 				'Run' => 'Run ID',
 				'Method' => 'Method',
