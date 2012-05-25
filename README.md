@@ -4,7 +4,7 @@ This module provides a SilverStripe-centric wrapper for the pecl package [xhprof
 
 ##Requirements
 
-You will require [xhprof](http://pecl.php.net/package/xhprof) installed in php to use `heyday-xhprof`.
+You will require [xhprof](http://pecl.php.net/package/xhprof) installed in php to use `heyday-xhprof`. In order to create call graphs you will also need GraphViz.
 
 ##Installation
 
