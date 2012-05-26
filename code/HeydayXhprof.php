@@ -33,35 +33,35 @@ class HeydayXhprof
 	 * Set the probability for profiling under load
 	 * Should be a from 0 to 1 inclusive
 	 */
-	public static function set_probability($probability)
+	public static function set_probability( $probability )
 	{
 
-		self::$probability = max(min(1, $probability), 0);
+		self::$probability = max( min( 1, $probability ), 0 );
 
 	}
 
 	/**
 	 * Test whether or not request should be profiled based on a probability.
 	 */
-	public static function test_probability($probability = null)
+	public static function test_probability( $probability = null )
 	{
 
-		if ($probability) {
+		if ( $probability ) {
 
-			self::set_probability($probability);
+			self::set_probability( $probability );
 
 		}
 
-		$unit = pow(10, strlen(self::$probability - (int) self::$probability) - 1);
+		$unit = pow( 10, strlen( self::$probability - (int) self::$probability ) - 1 );
 
-		return mt_rand(1, $unit / self::$probability) <= $unit;
+		return mt_rand( 1, $unit / self::$probability ) <= $unit;
 
 	}
 
 	/**
 	 * Add single url for exclusion
 	 */
-	public static function add_exclusion($exclusion)
+	public static function add_exclusion( $exclusion )
 	{
 
 		self::$exclusions[] = $exclusion;
@@ -71,22 +71,22 @@ class HeydayXhprof
 	/**
 	 * Add an array of urls for exclusion.
 	 */
-	public static function add_exclusions(array $exclusions)
+	public static function add_exclusions( array $exclusions )
 	{
 
-		self::$exclusions = array_merge(self::$exclusions, $exclusions);
+		self::$exclusions = array_merge( self::$exclusions, $exclusions );
 
 	}
 
 	/**
 	 * Check if we are allowed to profile based on url. If allowed by url, test probability.
 	 */
-	public static function is_allowed($url)
+	public static function is_allowed( $url )
 	{
 
-		foreach (self::$exclusions as $exclusion) {
+		foreach ( self::$exclusions as $exclusion ) {
 
-			if (strpos($url, $exclusion) !== false) {
+			if ( strpos( $url, $exclusion ) !== false ) {
 
 				return false;
 
@@ -101,27 +101,27 @@ class HeydayXhprof
 	/**
 	 * Start the profiling.
 	 */
-	public static function start($app_name = false, $flags = false)
+	public static function start( $app_name = false, $flags = false )
 	{
 
-		if (extension_loaded('xhprof')) {
+		if ( extension_loaded( 'xhprof' ) ) {
 
-			if (self::$started) {
+			if ( self::$started ) {
 
-				user_error("You have already started xhprof");
+				user_error( "You have already started xhprof" );
 
 			}
 
-			require_once dirname(__FILE__) . '/ThirdParty/xhprof_lib/utils/xhprof_lib.php';
-			require_once dirname(__FILE__) . '/ThirdParty/xhprof_lib/utils/xhprof_runs.php';
+			require_once dirname( __FILE__ ) . '/ThirdParty/xhprof_lib/utils/xhprof_lib.php';
+			require_once dirname( __FILE__ ) . '/ThirdParty/xhprof_lib/utils/xhprof_runs.php';
 
-			xhprof_enable($flags !== false ? $flags : self::get_default_flags());
+			xhprof_enable( $flags !== false ? $flags : self::get_default_flags() );
 
 			self::$started = true;
 
-			if ($app_name) {
+			if ( $app_name ) {
 
-				self::set_app_name($app_name);
+				self::set_app_name( $app_name );
 
 			}
 
@@ -135,11 +135,11 @@ class HeydayXhprof
 	public static function end()
 	{
 
-		if (extension_loaded('xhprof')) {
+		if ( extension_loaded( 'xhprof' ) ) {
 
-			if (!self::$started) {
+			if ( !self::$started ) {
 
-				user_error("You haven't started a profile");
+				user_error( "You haven't started a profile" );
 
 			}
 
@@ -149,55 +149,55 @@ class HeydayXhprof
 
 			$xhprof_runs = new XHProfRuns_Default();
 
-			$app = HeydayXhprofApp::get($appName);
+			$app = HeydayXhprofApp::get( $appName );
 
-			$run_id = $xhprof_runs->save_run($xhprof_data, $app->SafeName());
+			$run_id = $xhprof_runs->save_run( $xhprof_data, $app->SafeName() );
 
-			if (class_exists('ClassInfo') && ClassInfo::exists('HeydayXhprofRun')) {
+			if ( class_exists( 'ClassInfo' ) && ClassInfo::exists( 'HeydayXhprofRun' ) ) {
 
 				//Copied from Director::direct
-				if (isset($_GET['url'])) {
+				if ( isset( $_GET['url'] ) ) {
 					$url = $_GET['url'];
 					// IIS includes get variables in url
-					$i = strpos($url, '?');
-					if ($i !== false) {
-						$url = substr($url, 0, $i);
+					$i = strpos( $url, '?' );
+					if ( $i !== false ) {
+						$url = substr( $url, 0, $i );
 					}
 
 				// Lighttpd uses this
 				} else {
-					if (strpos($_SERVER['REQUEST_URI'],'?') !== false) {
-						list($url, $query) = explode('?', $_SERVER['REQUEST_URI'], 2);
-						parse_str($query, $_GET);
-						if ($_GET) $_REQUEST = array_merge((array) $_REQUEST, (array) $_GET);
+					if ( strpos( $_SERVER['REQUEST_URI'],'?' ) !== false ) {
+						list( $url, $query ) = explode( '?', $_SERVER['REQUEST_URI'], 2 );
+						parse_str( $query, $_GET );
+						if ( $_GET ) $_REQUEST = array_merge( (array) $_REQUEST, (array) $_GET );
 					} else {
 						$url = $_SERVER["REQUEST_URI"];
 					}
 				}
 
 				$request = new SS_HTTPRequest(
-					(isset($_SERVER['X-HTTP-Method-Override'])) ? $_SERVER['X-HTTP-Method-Override'] : $_SERVER['REQUEST_METHOD'],
+					isset( $_SERVER['X-HTTP-Method-Override'] ) ? $_SERVER['X-HTTP-Method-Override'] : $_SERVER['REQUEST_METHOD'],
 					$url,
 					$_GET,
-					array_merge((array) $_POST, (array) $_FILES),
-					@file_get_contents('php://input')
+					array_merge( (array) $_POST, (array) $_FILES ),
+					@file_get_contents( 'php://input' )
 				);
 
-				if ($request instanceof SS_HTTPRequest) {
+				if ( $request instanceof SS_HTTPRequest ) {
 
 					$requestVars = $request->requestVars();
-					unset($requestVars['url']);
+					unset( $requestVars['url'] );
 
-					$xhprofRun = new HeydayXhprofRun(array(
+					$xhprofRun = new HeydayXhprofRun( array(
 						'Run' => $run_id,
 						'AppID' => $app->ID,
 						'Url' => $request->getURL(),
 						'Method' => $request->httpMethod(),
 						'IP' => $request->getIP(),
-						'Params' => http_build_query($request->allParams(), '', "\n"),
-						'RequestVars' => http_build_query($requestVars, '', "\n"),
+						'Params' => http_build_query( $request->allParams(), '', "\n" ),
+						'RequestVars' => http_build_query( $requestVars, '', "\n" ),
 						'RequestBody' => $request->getBody()
-					));
+					) );
 
 				}
 
@@ -217,7 +217,7 @@ class HeydayXhprof
 	public static function get_default_flags()
 	{
 
-		if (self::$default_flags === false) {
+		if ( self::$default_flags === false ) {
 
 			self::$default_flags = XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY;
 
@@ -230,7 +230,7 @@ class HeydayXhprof
 	/**
 	 * Set default flags for use in profiling
 	 */
-	public static function set_default_flags($flags)
+	public static function set_default_flags( $flags )
 	{
 
 		self::$default_flags = $flags;
@@ -243,7 +243,7 @@ class HeydayXhprof
 	public static function get_app_name()
 	{
 
-		if (self::$app_name == false) {
+		if ( self::$app_name == false ) {
 
 			global $project;
 
@@ -258,7 +258,7 @@ class HeydayXhprof
 	/**
 	 * Set the app name for profile saving and run saving.
 	 */
-	public static function set_app_name($app_name)
+	public static function set_app_name( $app_name )
 	{
 
 		self::$app_name = $app_name;
@@ -278,22 +278,22 @@ class HeydayXhprof
 	/**
 	 * Remove any HeydayXhprofRuns if the corresponding profile is missing from the `tmp` directory.
 	 */
-	public static function remove_missing($appID = null)
+	public static function remove_missing( $appID = null )
 	{
 
-		$dir = realpath(ini_get("xhprof.output_dir"));
+		$dir = realpath( ini_get( "xhprof.output_dir" ) );
 
-		if ($dir) {
+		if ( $dir ) {
 
-			$runs = $appID ? DataObject::get('HeydayXhprofRun', "AppID = '$appID'") : DataObject::get('HeydayXhprofRun');
+			$runs = $appID ? DataObject::get( 'HeydayXhprofRun', "AppID = '$appID'" ) : DataObject::get( 'HeydayXhprofRun' );
 
-			if ($runs instanceof DataObjectSet) {
+			if ( $runs instanceof DataObjectSet ) {
 
-				foreach ($runs as $run) {
+				foreach ( $runs as $run ) {
 
 					$filename = $dir . '/' . $run->Run . '.' . $run->App()->SafeName();
 
-					if (!file_exists($filename)) {
+					if ( !file_exists( $filename ) ) {
 
 						$run->delete();
 

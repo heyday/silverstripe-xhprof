@@ -11,12 +11,12 @@ class HeydayXhprofApp extends DataObject
 		'Runs' => 'HeydayXhprofRun'
 	);
 
-	public static function get($appName)
+	public static function get( $appName )
 	{
 
-		$obj = DataObject::get_one('HeydayXhprofApp', "Name = '$appName'");
+		$obj = DataObject::get_one( 'HeydayXhprofApp', "Name = '$appName'" );
 
-		if (!$obj instanceof self) {
+		if ( !$obj instanceof self ) {
 
 			$obj = new self;
 
@@ -36,13 +36,13 @@ class HeydayXhprofApp extends DataObject
 		$fields = new FieldSet(
 			new TabSet(
 				'Root',
-				new Tab('Main')
+				new Tab( 'Main' )
 			)
 		);
 
-		$fields->addFieldToTab('Root.Main', new LiteralField('RemoveMissing', "<p><button class='action'><a href='/xhprof/removemissing/$this->ID' style='color: inherit; text-decoration: inherit;'>Remove records with missing profile dumps</a></button><p>"));
+		$fields->addFieldToTab( 'Root.Main', new LiteralField( 'RemoveMissing', "<p><button class='action'><a href='/xhprof/removemissing/$this->ID' style='color: inherit; text-decoration: inherit;'>Remove records with missing profile dumps</a></button><p>" ) );
 
-		$fields->addFieldToTab('Root.Main', $runs = new TableListField(
+		$fields->addFieldToTab( 'Root.Main', $runs = new TableListField(
 			'Runs',
 			'HeydayXhprofRun',
 			array(
@@ -57,9 +57,9 @@ class HeydayXhprofApp extends DataObject
 				'RequestBody' => 'RequestBody'
 			),
 			"AppID = '$this->ID'"
-		));
+		) );
 
-		$runs->setShowPagination(true);
+		$runs->setShowPagination( true );
 
 		return $fields;
 
@@ -68,13 +68,13 @@ class HeydayXhprofApp extends DataObject
 	public function SafeName()
 	{
 
-		$t = (function_exists('mb_strtolower')) ? mb_strtolower($this->Name) : strtolower($this->Name);
-		$t = Object::create('Transliterator')->toASCII($t);
-		$t = str_replace('&amp;','-and-',$t);
-		$t = str_replace('&','-and-',$t);
-		$t = ereg_replace('[^A-Za-z0-9]+','-',$t);
-		$t = ereg_replace('-+','-',$t);
-		$t = trim($t, '-');
+		$t = ( function_exists( 'mb_strtolower' ) ) ? mb_strtolower( $this->Name ) : strtolower( $this->Name );
+		$t = Object::create( 'Transliterator' )->toASCII( $t );
+		$t = str_replace( '&amp;', '-and-', $t );
+		$t = str_replace( '&', '-and-', $t );
+		$t = ereg_replace( '[^A-Za-z0-9]+', '-', $t );
+		$t = ereg_replace( '-+', '-', $t );
+		$t = trim( $t, '-' );
 
 		return $t;
 
