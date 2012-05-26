@@ -36,8 +36,18 @@ class HeydayXhprof
 	public static function set_probability( $probability )
 	{
 
-		self::$probability = max( min( 1, $probability ), 0 );
+		self::$probability = round( max( min( 1, $probability ), 0 ), 6);
 
+	}
+
+	/**
+	 * Get Probability
+	 */
+	public static function get_probability()
+	{
+
+		return self::$probability;
+		
 	}
 
 	/**
@@ -52,9 +62,17 @@ class HeydayXhprof
 
 		}
 
-		$unit = pow( 10, strlen( self::$probability - (int) self::$probability ) - 1 );
+		if ( self::$probability ) {
 
-		return mt_rand( 1, $unit / self::$probability ) <= $unit;
+			$unit = pow( 10, strlen( self::$probability ) );
+
+			return mt_rand( 1, $unit ) <= self::$probability * $unit;
+
+		} else {
+
+			return false;
+
+		}
 
 	}
 
@@ -79,22 +97,52 @@ class HeydayXhprof
 	}
 
 	/**
-	 * Check if we are allowed to profile based on url. If allowed by url, test probability.
+	 * Set exclusions
 	 */
-	public static function is_allowed( $url )
+	public static function set_exclusions( array $exclusions )
+	{
+
+		self::$exclusions = $exclusions;
+
+	}
+
+	/**
+	 * Get exclusions
+	 */
+	public static function get_exclusions()
+	{
+
+		return self::$exclusions;
+
+	}
+
+	/**
+	 * Check is url is excluded
+	 */
+	public function is_excluded( $url )
 	{
 
 		foreach ( self::$exclusions as $exclusion ) {
 
 			if ( strpos( $url, $exclusion ) !== false ) {
 
-				return false;
+				return true;
 
 			}
 
 		}
 
-		return self::test_probability();
+		return false;
+
+	}
+
+	/**
+	 * Check if we are allowed to profile based on url. If allowed by url, test probability.
+	 */
+	public static function is_allowed( $url )
+	{
+
+		return !self::is_excluded($url) && self::test_probability();
 
 	}
 
