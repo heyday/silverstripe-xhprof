@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HeydayXhprof acts as a wrapper to `xhprof` provding useful tools for starting and stopping `xhprof` profiling.
+ * HeydayXhprof acts as a wrapper to `xhprof` providing useful tools for starting and stopping `xhprof` profiling.
  */
 class HeydayXhprof
 {
