@@ -27,7 +27,7 @@ class HeydayXhprof
 		if (!$probability) {
 
 			$probability = self::$probability;
-			
+
 		}
 
 		$unit = pow(10, strlen($probability - (int) $probability) - 1);
@@ -47,7 +47,7 @@ class HeydayXhprof
 	{
 
 		self::$exclusions = array_merge(self::$exclusions, $exclusions);
-		
+
 	}
 
 	public static function is_allowed($url)
@@ -123,16 +123,16 @@ class HeydayXhprof
 					$url = $_GET['url'];
 					// IIS includes get variables in url
 					$i = strpos($url, '?');
-					if($i !== false) {
+					if ($i !== false) {
 						$url = substr($url, 0, $i);
 					}
-					
+
 				// Lighttpd uses this
 				} else {
-					if(strpos($_SERVER['REQUEST_URI'],'?') !== false) {
+					if (strpos($_SERVER['REQUEST_URI'],'?') !== false) {
 						list($url, $query) = explode('?', $_SERVER['REQUEST_URI'], 2);
 						parse_str($query, $_GET);
-						if ($_GET) $_REQUEST = array_merge((array)$_REQUEST, (array)$_GET);
+						if ($_GET) $_REQUEST = array_merge((array) $_REQUEST, (array) $_GET);
 					} else {
 						$url = $_SERVER["REQUEST_URI"];
 					}
@@ -140,9 +140,9 @@ class HeydayXhprof
 
 				$request = new SS_HTTPRequest(
 					(isset($_SERVER['X-HTTP-Method-Override'])) ? $_SERVER['X-HTTP-Method-Override'] : $_SERVER['REQUEST_METHOD'],
-					$url, 
-					$_GET, 
-					array_merge((array)$_POST, (array)$_FILES),
+					$url,
+					$_GET,
+					array_merge((array) $_POST, (array) $_FILES),
 					@file_get_contents('php://input')
 				);
 

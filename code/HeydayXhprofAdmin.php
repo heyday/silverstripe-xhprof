@@ -2,7 +2,7 @@
 
 class HeydayXhprofAdmin extends ModelAdmin
 {
-	
+
 	public static $managed_models = array(
 		'HeydayXhprofApp'
 	);
