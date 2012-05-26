@@ -1,17 +1,37 @@
 <?php
 
+/**
+ * HeydayXhprof acts as a wrapper to `xhprof` provding useful tools for starting and stopping `xhprof` profiling.
+ * 
+ */
 class HeydayXhprof
 {
 
+	/**
+	 * Stores default flags used in `xhprof_enable`
+	 */
 	static protected $default_flags = false;
+	/**
+	 * Stores the "app name"/profile name. Used in profile saving and `HeydayXhprofRun` saving.
+	 */
 	static protected $app_name = false;
+	/**
+	 * Stores whether or not profiling is currently in progress
+	 */
 	static protected $started = false;
+	/**
+	 * Stores probability for use in profiling under load
+	 */
 	static protected $probability = 1;
+	/**
+	 * Stores request url based exclusions
+	 */
 	static protected $exclusions = array(
 		'xhprof_html'
 	);
 
 	/**
+	 * Set the probability for profiling under load 
 	 * Should be a from 0 to 1 inclusive
 	 */
 	public static function set_probability($probability)
@@ -21,21 +41,27 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * Test whether or not request should be profiled based on a probability.
+	 */
 	public static function test_probability($probability = null)
 	{
 
-		if (!$probability) {
+		if ($probability) {
 
-			$probability = self::$probability;
+			self::set_probability($probability);
 
 		}
 
-		$unit = pow(10, strlen($probability - (int) $probability) - 1);
+		$unit = pow(10, strlen(self::$probability - (int) self::$probability) - 1);
 
-		return mt_rand(1, $unit / $probability) <= $unit;
+		return mt_rand(1, $unit / self::$probability) <= $unit;
 
 	}
 
+	/**
+	 * Add single url for exclusion
+	 */
 	public static function add_exclusion($exclusion)
 	{
 
@@ -43,6 +69,9 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * Add an array of urls for exclusion.
+	 */
 	public static function add_exclusions(array $exclusions)
 	{
 
@@ -50,6 +79,9 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * Check if we are allowed to profile based on url. If allowed by url, test probability.
+	 */
 	public static function is_allowed($url)
 	{
 
@@ -67,6 +99,9 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * Start the profiling.
+	 */
 	public static function start($app_name = false, $flags = false)
 	{
 
@@ -95,6 +130,9 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * End the current profiling.
+	 */
 	public static function end()
 	{
 
@@ -174,6 +212,9 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * Return default flags, if they don't exists then set some reasonable alternatives.
+	 */
 	public static function get_default_flags()
 	{
 
@@ -187,6 +228,9 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * Set default flags for use in profiling
+	 */
 	public static function set_default_flags($flags)
 	{
 
@@ -194,6 +238,9 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * Get the app name for profile saving, if it doesn't exist then set it the SilverStripe project name
+	 */
 	public static function get_app_name()
 	{
 
@@ -209,6 +256,9 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * Set the app name for profile saving and run saving.
+	 */
 	public static function set_app_name($app_name)
 	{
 
@@ -216,6 +266,9 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * Tests if profiling has been started
+	 */
 	public static function is_started()
 	{
 
@@ -223,6 +276,9 @@ class HeydayXhprof
 
 	}
 
+	/**
+	 * Remove any HeydayXhprofRuns if the corresponding profile is missing from the `tmp` directory.
+	 */
 	public static function remove_missing($appID = null)
 	{
 
