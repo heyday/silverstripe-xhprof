@@ -108,7 +108,7 @@ class HeydayXhprof
 
 			if ( self::$started ) {
 
-				user_error( "You have already started xhprof" );
+				user_error( 'You have already started xhprof' );
 
 			}
 
@@ -139,7 +139,7 @@ class HeydayXhprof
 
 			if ( !self::$started ) {
 
-				user_error( "You haven't started a profile" );
+				user_error( 'You haven\'t started a profile' );
 
 			}
 
@@ -157,21 +157,36 @@ class HeydayXhprof
 
 				//Copied from Director::direct
 				if ( isset( $_GET['url'] ) ) {
+
 					$url = $_GET['url'];
+
 					// IIS includes get variables in url
 					$i = strpos( $url, '?' );
+
 					if ( $i !== false ) {
+
 						$url = substr( $url, 0, $i );
 					}
 
 				// Lighttpd uses this
 				} else {
+
 					if ( strpos( $_SERVER['REQUEST_URI'],'?' ) !== false ) {
+
 						list( $url, $query ) = explode( '?', $_SERVER['REQUEST_URI'], 2 );
+
 						parse_str( $query, $_GET );
-						if ( $_GET ) $_REQUEST = array_merge( (array) $_REQUEST, (array) $_GET );
+
+						if ( $_GET ) {
+
+							$_REQUEST = array_merge( (array) $_REQUEST, (array) $_GET );
+
+						}
+
 					} else {
-						$url = $_SERVER["REQUEST_URI"];
+
+						$url = $_SERVER['REQUEST_URI'];
+
 					}
 				}
 
@@ -281,7 +296,7 @@ class HeydayXhprof
 	public static function remove_missing( $appID = null )
 	{
 
-		$dir = realpath( ini_get( "xhprof.output_dir" ) );
+		$dir = realpath( ini_get( 'xhprof.output_dir' ) );
 
 		if ( $dir ) {
 
