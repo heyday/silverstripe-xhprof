@@ -2,7 +2,6 @@
 
 /**
  * HeydayXhprof acts as a wrapper to `xhprof` provding useful tools for starting and stopping `xhprof` profiling.
- * 
  */
 class HeydayXhprof
 {
@@ -31,7 +30,7 @@ class HeydayXhprof
 	);
 
 	/**
-	 * Set the probability for profiling under load 
+	 * Set the probability for profiling under load
 	 * Should be a from 0 to 1 inclusive
 	 */
 	public static function set_probability($probability)
