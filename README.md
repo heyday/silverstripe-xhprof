@@ -72,17 +72,17 @@ When global profiling is enabled, this file (if it exists) is included before an
 
 To limit requests profiled you can use a probability. This useful for profiling on live server under load.
 
-	HeydayXhprof::set_probability( 2 / 3 );
+	HeydayXhprof::setProbability( 2 / 3 );
 	
 This example would make the probability of a profile being made `2 in 3`
 
-	HeydayXhprof::set_probability( 1 / 1000 );
+	HeydayXhprof::setProbability( 1 / 1000 );
 
 This example would make the probability of a profile being made `1 in 1000`
 
 ###Limiting local profiling by probability
 
-	if ( HeydayXhprof::test_probability( 1/100 ) ) {
+	if ( HeydayXhprof::testProbability( 1/100 ) ) {
 	
 		HeydayXhprof::start( 'Potentially Troublesome Code' );
 	

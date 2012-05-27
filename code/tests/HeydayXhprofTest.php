@@ -51,25 +51,25 @@ class HeydayXhprofTest extends SapphireTest
     public function testProbability()
     {
 
-        HeydayXhprof::set_probability(1/10);
+        HeydayXhprof::setProbability(1/10);
 
-        $this->assertEquals(1/10, HeydayXhprof::get_probability());
+        $this->assertEquals(1/10, HeydayXhprof::getProbability());
 
-        HeydayXhprof::set_probability(10);
+        HeydayXhprof::setProbability(10);
 
-        $this->assertEquals(1, HeydayXhprof::get_probability());
+        $this->assertEquals(1, HeydayXhprof::getProbability());
 
-        HeydayXhprof::set_probability(-10);
+        HeydayXhprof::setProbability(-10);
 
-        $this->assertEquals(0, HeydayXhprof::get_probability());
+        $this->assertEquals(0, HeydayXhprof::getProbability());
 
-        HeydayXhprof::set_probability(1);
+        HeydayXhprof::setProbability(1);
 
-        $this->assertTrue(HeydayXhprof::test_probability());
+        $this->assertTrue(HeydayXhprof::testProbability());
 
-        HeydayXhprof::set_probability(0);
+        HeydayXhprof::setProbability(0);
 
-        $this->assertFalse(HeydayXhprof::test_probability());
+        $this->assertFalse(HeydayXhprof::testProbability());
 
         function run()
         {
@@ -78,7 +78,7 @@ class HeydayXhprofTest extends SapphireTest
 
             for ( $i = 0; $i < $tot; $i++ ) {
 
-                if ( HeydayXhprof::test_probability() ) {
+                if ( HeydayXhprof::testProbability() ) {
 
                     $sum++;
 
@@ -90,29 +90,29 @@ class HeydayXhprofTest extends SapphireTest
 
         }
 
-        HeydayXhprof::set_probability( 1 / 10 );
+        HeydayXhprof::setProbability( 1 / 10 );
 
-        $this->assertEquals( run(), round( HeydayXhprof::get_probability(), 1 ) );
+        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
 
-        HeydayXhprof::set_probability( 1 / 100 );
+        HeydayXhprof::setProbability( 1 / 100 );
 
-        $this->assertEquals( run(), round( HeydayXhprof::get_probability(), 1 ) );
+        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
 
-        HeydayXhprof::set_probability( 1 / 1000 );
+        HeydayXhprof::setProbability( 1 / 1000 );
 
-        $this->assertEquals( run(), round( HeydayXhprof::get_probability(), 1 ) );
+        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
 
-        HeydayXhprof::set_probability( 1 / 2 );
+        HeydayXhprof::setProbability( 1 / 2 );
 
-        $this->assertEquals( run(), round( HeydayXhprof::get_probability(), 1 ) );
+        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
 
-        HeydayXhprof::set_probability( 1 / 3 );
+        HeydayXhprof::setProbability( 1 / 3 );
 
-        $this->assertEquals( run(), round( HeydayXhprof::get_probability(), 1 ) );
+        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
 
-        HeydayXhprof::set_probability( 2 / 3 );
+        HeydayXhprof::setProbability( 2 / 3 );
 
-        $this->assertEquals( run(), round( HeydayXhprof::get_probability(), 1 ) );
+        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
 
     }
 
@@ -158,7 +158,7 @@ class HeydayXhprofTest extends SapphireTest
 
         $this->assertFalse( HeydayXhprof::is_excluded('barbie') );
 
-        HeydayXhprof::set_probability(1);
+        HeydayXhprof::setProbability(1);
 
         $this->assertTrue( HeydayXhprof::is_allowed('barbie') );
         $this->assertFalse( HeydayXhprof::is_allowed('/bob/') );

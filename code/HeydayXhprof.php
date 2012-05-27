@@ -1,7 +1,23 @@
 <?php
 
 /**
+ * HeydayXhprof
+ *
+ * @category SilverStripe_Module
+ * @package  Heyday
+ * @author   Cam Spiers <cameron@heyday.co.nz>
+ * @license  http://www.opensource.org/licenses/MIT MIT
+ * @link     http://heyday.co.nz
+ */
+
+/**
  * HeydayXhprof acts as a wrapper to `xhprof` providing useful tools for starting and stopping `xhprof` profiling.
+ *
+ * @category SilverStripe_Module
+ * @package  Heyday
+ * @author   Cam Spiers <cameron@heyday.co.nz>
+ * @license  http://www.opensource.org/licenses/MIT MIT
+ * @link     http://heyday.co.nz
  */
 class HeydayXhprof
 {
@@ -30,19 +46,24 @@ class HeydayXhprof
 
     /**
      * Set the probability for profiling under load
-     * Should be a from 0 to 1 inclusive
+     *
+     * @param int $probability The probability to be set. Should be a from 0 to 1 inclusive
+     *
+     * @return null
      */
-    public static function set_probability( $probability )
+    public static function setProbability($probability)
     {
 
-        self::$probability = round( max( min( 1, $probability ), 0 ), 6);
+        self::$probability = round(max(min(1, $probability), 0), 6);
 
     }
 
     /**
      * Get Probability
+     * 
+     * @return int
      */
-    public static function get_probability()
+    public static function getProbability()
     {
 
         return self::$probability;
@@ -51,21 +72,25 @@ class HeydayXhprof
 
     /**
      * Test whether or not request should be profiled based on a probability.
+     *
+     * @param int $probability Optional probability to be set.
+     *
+     * @return bool
      */
-    public static function test_probability( $probability = null )
+    public static function testProbability($probability = null)
     {
 
-        if ( $probability ) {
+        if ($probability) {
 
-            self::set_probability( $probability );
+            self::setProbability($probability);
 
         }
 
-        if ( self::$probability ) {
+        if (self::$probability) {
 
-            $unit = pow( 10, strlen( self::$probability ) );
+            $unit = pow(10, strlen(self::$probability));
 
-            return mt_rand( 1, $unit ) <= self::$probability * $unit;
+            return mt_rand(1, $unit) <= self::$probability * $unit;
 
         } else {
 
@@ -141,7 +166,7 @@ class HeydayXhprof
     public static function is_allowed( $url )
     {
 
-        return !self::is_excluded($url) && self::test_probability();
+        return !self::is_excluded($url) && self::testProbability();
 
     }
 
