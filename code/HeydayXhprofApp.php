@@ -3,81 +3,81 @@
 class HeydayXhprofApp extends DataObject
 {
 
-	static $db = array(
-		'Name' => 'Varchar(255)'
-	);
+    public static $db = array(
+        'Name' => 'Varchar(255)'
+    );
 
-	static $has_many = array(
-		'Runs' => 'HeydayXhprofRun'
-	);
+    public static $has_many = array(
+        'Runs' => 'HeydayXhprofRun'
+    );
 
-	public static function get( $appName )
-	{
+    public static function get( $appName )
+    {
 
-		$obj = DataObject::get_one( 'HeydayXhprofApp', "Name = '$appName'" );
+        $obj = DataObject::get_one( 'HeydayXhprofApp', "Name = '$appName'" );
 
-		if ( !$obj instanceof self ) {
+        if ( !$obj instanceof self ) {
 
-			$obj = new self;
+            $obj = new self;
 
-			$obj->Name = $appName;
+            $obj->Name = $appName;
 
-			$obj->write();
+            $obj->write();
 
-		}
+        }
 
-		return $obj;
+        return $obj;
 
-	}
+    }
 
-	public function getCMSFields()
-	{
+    public function getCMSFields()
+    {
 
-		$fields = new FieldSet(
-			new TabSet(
-				'Root',
-				new Tab( 'Main' )
-			)
-		);
+        $fields = new FieldSet(
+            new TabSet(
+                'Root',
+                new Tab( 'Main' )
+            )
+        );
 
-		$fields->addFieldToTab( 'Root.Main', new LiteralField( 'RemoveMissing', "<p><button class='action'><a href='/xhprof/removemissing/$this->ID' style='color: inherit; text-decoration: inherit;'>Remove records with missing profile dumps</a></button><p>" ) );
+        $fields->addFieldToTab( 'Root.Main', new LiteralField( 'RemoveMissing', "<p><button class='action'><a href='/xhprof/removemissing/$this->ID' style='color: inherit; text-decoration: inherit;'>Remove records with missing profile dumps</a></button><p>" ) );
 
-		$fields->addFieldToTab( 'Root.Main', $runs = new TableListField(
-			'Runs',
-			'HeydayXhprofRun',
-			array(
-				'View' => 'View',
-				'Created' => 'Created',
-				'Url' => 'Url',
-				'Run' => 'Run ID',
-				'Method' => 'Method',
-				'IP' => 'IP',
-				'Params' => 'Params',
-				'RequestVars' => 'RequestVars',
-				'RequestBody' => 'RequestBody'
-			),
-			"AppID = '$this->ID'"
-		) );
+        $fields->addFieldToTab( 'Root.Main', $runs = new TableListField(
+            'Runs',
+            'HeydayXhprofRun',
+            array(
+                'View' => 'View',
+                'Created' => 'Created',
+                'Url' => 'Url',
+                'Run' => 'Run ID',
+                'Method' => 'Method',
+                'IP' => 'IP',
+                'Params' => 'Params',
+                'RequestVars' => 'RequestVars',
+                'RequestBody' => 'RequestBody'
+            ),
+            "AppID = '$this->ID'"
+        ) );
 
-		$runs->setShowPagination( true );
+        $runs->setShowPagination( true );
 
-		return $fields;
+        return $fields;
 
-	}
+    }
 
-	public function SafeName()
-	{
+    public function SafeName()
+    {
 
-		$t = ( function_exists( 'mb_strtolower' ) ) ? mb_strtolower( $this->Name ) : strtolower( $this->Name );
-		$t = Object::create( 'Transliterator' )->toASCII( $t );
-		$t = str_replace( '&amp;', '-and-', $t );
-		$t = str_replace( '&', '-and-', $t );
-		$t = ereg_replace( '[^A-Za-z0-9]+', '-', $t );
-		$t = ereg_replace( '-+', '-', $t );
-		$t = trim( $t, '-' );
+        $t = ( function_exists( 'mb_strtolower' ) ) ? mb_strtolower( $this->Name ) : strtolower( $this->Name );
+        $t = Object::create( 'Transliterator' )->toASCII( $t );
+        $t = str_replace( '&amp;', '-and-', $t );
+        $t = str_replace( '&', '-and-', $t );
+        $t = ereg_replace( '[^A-Za-z0-9]+', '-', $t );
+        $t = ereg_replace( '-+', '-', $t );
+        $t = trim( $t, '-' );
 
-		return $t;
+        return $t;
 
-	}
+    }
 
 }
