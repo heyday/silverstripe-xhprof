@@ -107,7 +107,7 @@ To exclude certain urls:
 
 ##Unit Testing
 
-If you have `phpunit` installed you can run `heyday-xhprof`'s unit tests to see if everything is functionality correctly.
+If you have `phpunit` installed you can run `heyday-xhprof`'s unit tests to see if everything is functioning correctly.
 
 ###Running the unit tests
 
