@@ -105,6 +105,17 @@ To exclude certain urls:
 		'/Security/ping'
 	));
 
+##Testing
+
+To run HeydayXhprofs unit tests from the command line run:
+	
+	./sake dev/tests/module/heyday-xhprof
+
+
+From brower
+
+	http://localhost/dev/tests/module/heyday-xhprof
+
 ##Notes:
 
 ###OS X:

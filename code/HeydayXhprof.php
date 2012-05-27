@@ -173,6 +173,10 @@ class HeydayXhprof
 
 			}
 
+		} else {
+
+			user_error( 'Xhprof extension not loaded' );
+
 		}
 
 	}
@@ -193,11 +197,11 @@ class HeydayXhprof
 
 			$appName = self::get_app_name();
 
+			$app = HeydayXhprofApp::get( $appName );
+
 			$xhprof_data = xhprof_disable();
 
 			$xhprof_runs = new XHProfRuns_Default();
-
-			$app = HeydayXhprofApp::get( $appName );
 
 			$run_id = $xhprof_runs->save_run( $xhprof_data, $app->SafeName() );
 
@@ -269,6 +273,10 @@ class HeydayXhprof
 			$xhprofRun->write();
 
 			self::$started = false;
+
+		} else {
+
+			user_error( 'Xhprof extension not loaded' );
 
 		}
 
