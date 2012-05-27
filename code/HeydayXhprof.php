@@ -124,7 +124,7 @@ class HeydayXhprof
 
 		foreach ( self::$exclusions as $exclusion ) {
 
-			if ( strpos( $url, $exclusion ) !== false ) {
+			if ( stripos( $url, $exclusion ) !== false ) {
 
 				return true;
 

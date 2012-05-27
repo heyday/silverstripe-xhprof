@@ -162,6 +162,8 @@ class HeydayXhprofTest extends SapphireTest
 
 		$this->assertTrue( HeydayXhprof::is_excluded('hello') );
 
+		$this->assertTrue( HeydayXhprof::is_excluded('Hello') );
+
 		$this->assertFalse( HeydayXhprof::is_excluded('barbie') );
 
 
