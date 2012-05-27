@@ -4,7 +4,7 @@ This module provides a SilverStripe-centric wrapper for the pecl package [xhprof
 
 ##Requirements
 
-You will require [xhprof](http://pecl.php.net/package/xhprof) installed in php to use `heyday-xhprof`. In order to create call graphs you will also need GraphViz.
+You will require [xhprof](http://pecl.php.net/package/xhprof) installed in php to use `heyday-xhprof`. In order to create call graphs through the `xhprof gui` you will also need [Graphviz](http://www.graphviz.org/).
 
 ##Installation
 
@@ -72,25 +72,25 @@ When global profiling is enabled, this file (if it exists) is included before an
 
 To limit requests profiled you can use a probability. This useful for profiling on live server under load.
 
-	HeydayXhprof::set_probability(2/3);
+	HeydayXhprof::set_probability( 2 / 3 );
 	
 This example would make the probability of a profile being made `2 in 3`
 
-	HeydayXhprof::set_probability(1/1000);
+	HeydayXhprof::set_probability( 1 / 1000 );
 
 This example would make the probability of a profile being made `1 in 1000`
 
 ###Limiting local profiling by probability
 
-	if (HeydayXhprof::test_probability(1/100)) {
+	if ( HeydayXhprof::test_probability( 1/100 ) ) {
 	
-		HeydayXhprof::start('Potentially Troublesome Code');
+		HeydayXhprof::start( 'Potentially Troublesome Code' );
 	
 	}
 
 	//Code to profile
 	
-	if (HeydayXhprof::is_started()) {
+	if ( HeydayXhprof::is_started() ) {
 
 		HeydayXhprof::end();
 	
@@ -100,19 +100,23 @@ This example would make the probability of a profile being made `1 in 1000`
 
 To exclude certain urls:
 
-	HeydayXhprof::add_exclusions(array(
+	HeydayXhprof::add_exclusions( array(
 		'/admin/xhprof/',
 		'/Security/ping'
-	));
+	) );
 
-##Testing
+##Unit Testing
 
-To run HeydayXhprofs unit tests from the command line run:
+If you have `phpunit` installed you can run `heyday-xhprof`'s unit tests to see if everything is functionality correctly.
+
+###Running the unit tests
+
+From the command line:
 	
 	./sake dev/tests/module/heyday-xhprof
 
 
-From brower
+From your browser:
 
 	http://localhost/dev/tests/module/heyday-xhprof
 
