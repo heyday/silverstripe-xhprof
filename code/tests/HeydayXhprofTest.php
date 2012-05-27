@@ -6,11 +6,9 @@ class HeydayXhprofTest extends SapphireTest
 	public function testAppName()
 	{
 
-
 		HeydayXhprof::set_app_name('Something');
 
 		$this->assertEquals( 'Something', HeydayXhprof::get_app_name() );
-
 
 	}
 
@@ -57,29 +55,24 @@ class HeydayXhprofTest extends SapphireTest
 
 		$this->assertEquals(1/10, HeydayXhprof::get_probability());
 
-
 		HeydayXhprof::set_probability(10);
 
 		$this->assertEquals(1, HeydayXhprof::get_probability());
-
 
 		HeydayXhprof::set_probability(-10);
 
 		$this->assertEquals(0, HeydayXhprof::get_probability());
 
-
 		HeydayXhprof::set_probability(1);
 
 		$this->assertTrue(HeydayXhprof::test_probability());
-
 
 		HeydayXhprof::set_probability(0);
 
 		$this->assertFalse(HeydayXhprof::test_probability());
 
-
-		function run() {
-
+		function run()
+		{
 			$sum = 0;
 			$tot = 100000;
 
@@ -143,7 +136,6 @@ class HeydayXhprofTest extends SapphireTest
 
 		$this->assertEquals( $exclusions, HeydayXhprof::get_exclusions() );
 
-
 		$exclusions = array(
 			'hello',
 			'something',
@@ -166,12 +158,11 @@ class HeydayXhprofTest extends SapphireTest
 
 		$this->assertFalse( HeydayXhprof::is_excluded('barbie') );
 
-
 		HeydayXhprof::set_probability(1);
 
 		$this->assertTrue( HeydayXhprof::is_allowed('barbie') );
 		$this->assertFalse( HeydayXhprof::is_allowed('/bob/') );
 
 	}
-	
+
 }

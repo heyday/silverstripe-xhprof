@@ -47,7 +47,7 @@ class HeydayXhprof
 	{
 
 		return self::$probability;
-		
+
 	}
 
 	/**
