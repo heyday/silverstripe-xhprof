@@ -1,8 +1,30 @@
 <?php
+/**
+ * HeydayXhprofApp
+ *
+ * @category SilverStripe_Module
+ * @package  Heyday
+ * @author   Cam Spiers <cameron@heyday.co.nz>
+ * @license  http://www.opensource.org/licenses/MIT MIT
+ * @link     http://heyday.co.nz
+ */
 
+/**
+ * HeydayXhprofApp stores apps in the database.
+ * 
+ * @category SilverStripe_Module
+ * @package  Heyday
+ * @author   Cam Spiers <cameron@heyday.co.nz>
+ * @license  http://www.opensource.org/licenses/MIT MIT
+ * @link     http://heyday.co.nz
+ */
 class HeydayXhprofRun extends DataObject
 {
 
+    /**
+     * Database fields
+     * @var array
+     */
     public static $db = array(
         'Run' => 'Varchar(255)',
         'Url' => 'Text',
@@ -13,13 +35,26 @@ class HeydayXhprofRun extends DataObject
         'RequestBody' => 'Text'
     );
 
+    /**
+     * Has one fields
+     * @var array
+     */
     public static $has_one = array(
         'App' => 'HeydayXhprofApp'
     );
 
+    /**
+     * Default way to sort
+     * @var string
+     */
     public static $default_sort = 'Created DESC';
 
-    public function View()
+    /**
+     * Link for viewing run
+     * 
+     * @return string
+     */
+    public function view()
     {
 
         return <<<LINK

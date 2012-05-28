@@ -1,5 +1,4 @@
 <?php
-
 /**
  * HeydayXhprofController
  *
@@ -113,6 +112,9 @@ class HeydayXhprofController extends Controller
             if (file_exists($backupFileName)) {
                 unlink($htaccessFileName);
                 rename($backupFileName, $htaccessFileName);
+                return 'Done' . PHP_EOL;
+            } else {
+                return "It appears that global profiling is not enabled as there is no backup file to restore from." . PHP_EOL;
             }
             break;
 
@@ -121,6 +123,9 @@ class HeydayXhprofController extends Controller
             if (!file_exists($backupFileName)) {
                 rename($htaccessFileName, $backupFileName);
                 file_put_contents($htaccessFileName, $this->globalIncludes() . file_get_contents($backupFileName));
+                return 'Done' . PHP_EOL;
+            } else {
+                return "It appears that global profiling is already enabled as a backup file exists." . PHP_EOL;
             }
             break;
 

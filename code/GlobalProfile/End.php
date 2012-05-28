@@ -1,6 +1,6 @@
 <?php
 
-if ( HeydayXhprof::isStarted() ) {
+if (HeydayXhprof::isStarted()) {
 
     HeydayXhprof::end();
 
