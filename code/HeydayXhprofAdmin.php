@@ -42,7 +42,7 @@ class HeydayXhprofAdmin extends ModelAdmin
     public static $menu_title = 'Xhprof';
 
     /**
-     * No modle importers
+     * No model importers
      * @var array
      */
     public static $model_importers = array();

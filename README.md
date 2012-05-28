@@ -2,6 +2,10 @@
 
 This module provides a SilverStripe-centric wrapper for the pecl package [xhprof](http://pecl.php.net/package/xhprof) and the [xhprof gui](https://github.com/facebook/xhprof).
 
+##License
+
+This project is licensed under an MIT license which can be found at `heyday-xhprof/LICENSE`
+
 ##Requirements
 
 You will require [xhprof](http://pecl.php.net/package/xhprof) installed in php to use `heyday-xhprof`. In order to create call graphs through the `xhprof gui` you will also need [Graphviz](http://www.graphviz.org/).
@@ -72,25 +76,25 @@ When global profiling is enabled, this file (if it exists) is included before an
 
 To limit requests profiled you can use a probability. This useful for profiling on live server under load.
 
-	HeydayXhprof::setProbability( 2 / 3 );
+	HeydayXhprof::setProbability(2/3);
 	
 This example would make the probability of a profile being made `2 in 3`
 
-	HeydayXhprof::setProbability( 1 / 1000 );
+	HeydayXhprof::setProbability(1/1000);
 
 This example would make the probability of a profile being made `1 in 1000`
 
 ###Limiting local profiling by probability
 
-	if ( HeydayXhprof::testProbability( 1/100 ) ) {
+	if (HeydayXhprof::testProbability(1/100)) {
 	
-		HeydayXhprof::start( 'Potentially Troublesome Code' );
+		HeydayXhprof::start('Potentially Troublesome Code');
 	
 	}
 
 	//Code to profile
 	
-	if ( HeydayXhprof::isStarted() ) {
+	if (HeydayXhprof::isStarted()) {
 
 		HeydayXhprof::end();
 	
@@ -100,10 +104,10 @@ This example would make the probability of a profile being made `1 in 1000`
 
 To exclude certain urls:
 
-	HeydayXhprof::addExclusions( array(
+	HeydayXhprof::addExclusions(array(
 		'/admin/xhprof/',
 		'/Security/ping'
-	) );
+	));
 
 ##Unit Testing
 
@@ -119,6 +123,15 @@ From the command line:
 From your browser:
 
 	http://localhost/dev/tests/module/heyday-xhprof
+
+##Contributing
+
+###Code guidelines
+
+This project follows the standards defined in:
+
+* [PSR-1](https://github.com/pmjones/fig-standards/blob/psr-1-style-guide/proposed/PSR-1-basic.md)
+* [PSR-2](https://github.com/pmjones/fig-standards/blob/psr-1-style-guide/proposed/PSR-2-advanced.md)
 
 ##Notes:
 
