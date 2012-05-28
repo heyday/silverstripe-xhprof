@@ -442,7 +442,7 @@ class HeydayXhprof
 
         if ($dir) {
 
-            $runs = $appID ? DataObject::get('HeydayXhprofRun', "AppID = '$appID'") : DataObject::get('HeydayXhprofRun');
+            $runs = DataObject::get('HeydayXhprofRun', $appID ? "AppID = '$appID'" : null);
 
             if ($runs instanceof DataObjectSet) {
 
