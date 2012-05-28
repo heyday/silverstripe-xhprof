@@ -100,7 +100,7 @@ This example would make the probability of a profile being made `1 in 1000`
 
 To exclude certain urls:
 
-	HeydayXhprof::add_exclusions( array(
+	HeydayXhprof::addExclusions( array(
 		'/admin/xhprof/',
 		'/Security/ping'
 	) );

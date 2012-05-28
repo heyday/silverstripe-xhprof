@@ -102,8 +102,12 @@ class HeydayXhprof
 
     /**
      * Add single url for exclusion
+     *
+     * @param string $exclusion Url to add to exclusion list
+     *
+     * @return null
      */
-    public static function add_exclusion( $exclusion )
+    public static function addExclusion($exclusion)
     {
 
         self::$exclusions[] = $exclusion;
@@ -112,18 +116,26 @@ class HeydayXhprof
 
     /**
      * Add an array of urls for exclusion.
+     *
+     * @param array $exclusions An array of exclusions to be merged on to the exclusions list
+     *
+     * @return null
      */
-    public static function add_exclusions( array $exclusions )
+    public static function addExclusions(array $exclusions)
     {
 
-        self::$exclusions = array_merge( self::$exclusions, $exclusions );
+        self::$exclusions = array_merge(self::$exclusions, $exclusions);
 
     }
 
     /**
      * Set exclusions
+     *
+     * @param array $exclusions An array of exclusions to set to the exclusions list
+     *
+     * @return null
      */
-    public static function set_exclusions( array $exclusions )
+    public static function setExclusions(array $exclusions)
     {
 
         self::$exclusions = $exclusions;
@@ -132,8 +144,10 @@ class HeydayXhprof
 
     /**
      * Get exclusions
+     *
+     * @return array
      */
-    public static function get_exclusions()
+    public static function getExclusions()
     {
 
         return self::$exclusions;
@@ -142,13 +156,17 @@ class HeydayXhprof
 
     /**
      * Check is url is excluded
+     *
+     * @param string $url A url to check if it is excluded by the exclusions list
+     *
+     * @return bool
      */
-    public function is_excluded( $url )
+    public function isExcluded($url)
     {
 
-        foreach ( self::$exclusions as $exclusion ) {
+        foreach (self::$exclusions as $exclusion) {
 
-            if ( stripos( $url, $exclusion ) !== false ) {
+            if (stripos($url, $exclusion) !== false) {
 
                 return true;
 
@@ -162,11 +180,15 @@ class HeydayXhprof
 
     /**
      * Check if we are allowed to profile based on url. If allowed by url, test probability.
+     *
+     * @param string $url A url to check if it is excluded by the exclusions list
+     *
+     * @return bool
      */
-    public static function is_allowed( $url )
+    public static function isAllowed($url)
     {
 
-        return !self::is_excluded($url) && self::testProbability();
+        return !self::isExcluded($url) && self::testProbability();
 
     }
 

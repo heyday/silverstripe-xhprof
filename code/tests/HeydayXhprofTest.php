@@ -123,18 +123,18 @@ class HeydayXhprofTest extends SapphireTest
             'hello'
         );
 
-        HeydayXhprof::set_exclusions( $exclusions );
+        HeydayXhprof::setExclusions( $exclusions );
 
-        $this->assertEquals( $exclusions, HeydayXhprof::get_exclusions() );
+        $this->assertEquals( $exclusions, HeydayXhprof::getExclusions() );
 
         $exclusions = array(
             'hello',
             'something'
         );
 
-        HeydayXhprof::add_exclusion( 'something' );
+        HeydayXhprof::addExclusion( 'something' );
 
-        $this->assertEquals( $exclusions, HeydayXhprof::get_exclusions() );
+        $this->assertEquals( $exclusions, HeydayXhprof::getExclusions() );
 
         $exclusions = array(
             'hello',
@@ -146,22 +146,22 @@ class HeydayXhprofTest extends SapphireTest
             'bob'
         );
 
-        HeydayXhprof::add_exclusions( $newExclusions );
+        HeydayXhprof::addExclusions( $newExclusions );
 
-        $this->assertEquals( $exclusions, HeydayXhprof::get_exclusions() );
+        $this->assertEquals( $exclusions, HeydayXhprof::getExclusions() );
 
-        $this->assertTrue( HeydayXhprof::is_excluded('bob') );
+        $this->assertTrue( HeydayXhprof::isExcluded('bob') );
 
-        $this->assertTrue( HeydayXhprof::is_excluded('hello') );
+        $this->assertTrue( HeydayXhprof::isExcluded('hello') );
 
-        $this->assertTrue( HeydayXhprof::is_excluded('Hello') );
+        $this->assertTrue( HeydayXhprof::isExcluded('Hello') );
 
-        $this->assertFalse( HeydayXhprof::is_excluded('barbie') );
+        $this->assertFalse( HeydayXhprof::isExcluded('barbie') );
 
         HeydayXhprof::setProbability(1);
 
-        $this->assertTrue( HeydayXhprof::is_allowed('barbie') );
-        $this->assertFalse( HeydayXhprof::is_allowed('/bob/') );
+        $this->assertTrue( HeydayXhprof::isAllowed('barbie') );
+        $this->assertFalse( HeydayXhprof::isAllowed('/bob/') );
 
     }
 
