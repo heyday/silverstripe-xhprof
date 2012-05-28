@@ -204,16 +204,16 @@ class HeydayXhprof
     public static function start($app_name = false, $flags = false)
     {
 
-        if ( extension_loaded('xhprof') ) {
+        if (extension_loaded('xhprof')) {
 
-            if ( self::$started ) {
+            if (self::$started) {
 
                 user_error('You have already started xhprof');
 
             }
 
-            include_once dirname(__FILE__) . '/ThirdParty/xhprof_lib/utils/xhprof_lib.php';
-            include_once dirname(__FILE__) . '/ThirdParty/xhprof_lib/utils/xhprof_runs.php';
+            include_once __DIR__ . '/ThirdParty/xhprof_lib/utils/xhprof_lib.php';
+            include_once __DIR__ . '/ThirdParty/xhprof_lib/utils/xhprof_runs.php';
 
             xhprof_enable($flags !== false ? $flags : self::getDefaultFlags());
 
@@ -327,7 +327,7 @@ class HeydayXhprof
 
                 parse_str($query, $_GET);
 
-                if ( $_GET ) {
+                if ($_GET) {
 
                     $_REQUEST = array_merge((array) $_REQUEST, (array) $_GET);
 
@@ -391,7 +391,7 @@ class HeydayXhprof
     public static function getAppName()
     {
 
-        if ( self::$app_name == false ) {
+        if (self::$app_name == false) {
 
             global $project;
 
