@@ -194,34 +194,40 @@ class HeydayXhprof
 
     /**
      * Start the profiling.
+     * 
+     * @param boolean $app_name The "app name" for the profile save and Run save
+     * 
+     * @param boolean $flags    Flags for xhprof_enable call
+     * 
+     * @return null
      */
-    public static function start( $app_name = false, $flags = false )
+    public static function start($app_name = false, $flags = false)
     {
 
-        if ( extension_loaded( 'xhprof' ) ) {
+        if ( extension_loaded('xhprof') ) {
 
             if ( self::$started ) {
 
-                user_error( 'You have already started xhprof' );
+                user_error('You have already started xhprof');
 
             }
 
-            require_once dirname( __FILE__ ) . '/ThirdParty/xhprof_lib/utils/xhprof_lib.php';
-            require_once dirname( __FILE__ ) . '/ThirdParty/xhprof_lib/utils/xhprof_runs.php';
+            include_once dirname(__FILE__) . '/ThirdParty/xhprof_lib/utils/xhprof_lib.php';
+            include_once dirname(__FILE__) . '/ThirdParty/xhprof_lib/utils/xhprof_runs.php';
 
-            xhprof_enable( $flags !== false ? $flags : self::get_default_flags() );
+            xhprof_enable($flags !== false ? $flags : self::getDefaultFlags());
 
             self::$started = true;
 
-            if ( $app_name ) {
+            if ($app_name) {
 
-                self::set_app_name( $app_name );
+                self::setAppName($app_name);
 
             }
 
         } else {
 
-            user_error( 'Xhprof extension not loaded' );
+            user_error('Xhprof extension not loaded');
 
         }
 
@@ -229,88 +235,51 @@ class HeydayXhprof
 
     /**
      * End the current profiling.
+     * 
+     * @return null
      */
     public static function end()
     {
 
-        if ( extension_loaded( 'xhprof' ) ) {
+        if (extension_loaded('xhprof')) {
 
-            if ( !self::$started ) {
+            if (!self::$started) {
 
-                user_error( 'You haven\'t started a profile' );
+                user_error('You haven\'t started a profile');
 
             }
 
-            $appName = self::get_app_name();
+            $appName = self::getAppName();
 
-            $app = HeydayXhprofApp::get( $appName );
+            $app = HeydayXhprofApp::get($appName);
 
             $xhprof_data = xhprof_disable();
 
             $xhprof_runs = new XHProfRuns_Default();
 
-            $run_id = $xhprof_runs->save_run( $xhprof_data, $app->SafeName() );
+            $run_id = $xhprof_runs->save_run($xhprof_data, $app->SafeName());
 
-            if ( class_exists( 'ClassInfo' ) && ClassInfo::exists( 'HeydayXhprofRun' ) ) {
+            if (class_exists('ClassInfo') && ClassInfo::exists('HeydayXhprofRun')) {
 
-                //Copied from Director::direct
-                if ( isset( $_GET['url'] ) ) {
+                $request = self::getRequest();
 
-                    $url = $_GET['url'];
-
-                    // IIS includes get variables in url
-                    $i = strpos( $url, '?' );
-
-                    if ( $i !== false ) {
-
-                        $url = substr( $url, 0, $i );
-                    }
-
-                // Lighttpd uses this
-                } else {
-
-                    if ( strpos( $_SERVER['REQUEST_URI'],'?' ) !== false ) {
-
-                        list( $url, $query ) = explode( '?', $_SERVER['REQUEST_URI'], 2 );
-
-                        parse_str( $query, $_GET );
-
-                        if ( $_GET ) {
-
-                            $_REQUEST = array_merge( (array) $_REQUEST, (array) $_GET );
-
-                        }
-
-                    } else {
-
-                        $url = $_SERVER['REQUEST_URI'];
-
-                    }
-                }
-
-                $request = new SS_HTTPRequest(
-                    isset( $_SERVER['X-HTTP-Method-Override'] ) ? $_SERVER['X-HTTP-Method-Override'] : $_SERVER['REQUEST_METHOD'],
-                    $url,
-                    $_GET,
-                    array_merge( (array) $_POST, (array) $_FILES ),
-                    @file_get_contents( 'php://input' )
-                );
-
-                if ( $request instanceof SS_HTTPRequest ) {
+                if ($request instanceof SS_HTTPRequest) {
 
                     $requestVars = $request->requestVars();
-                    unset( $requestVars['url'] );
+                    unset($requestVars['url']);
 
-                    $xhprofRun = new HeydayXhprofRun( array(
-                        'Run' => $run_id,
-                        'AppID' => $app->ID,
-                        'Url' => $request->getURL(),
-                        'Method' => $request->httpMethod(),
-                        'IP' => $request->getIP(),
-                        'Params' => http_build_query( $request->allParams(), '', "\n" ),
-                        'RequestVars' => http_build_query( $requestVars, '', "\n" ),
-                        'RequestBody' => $request->getBody()
-                    ) );
+                    $xhprofRun = new HeydayXhprofRun(
+                        array(
+                            'Run' => $run_id,
+                            'AppID' => $app->ID,
+                            'Url' => $request->getURL(),
+                            'Method' => $request->httpMethod(),
+                            'IP' => $request->getIP(),
+                            'Params' => http_build_query($request->allParams(), '', "\n"),
+                            'RequestVars' => http_build_query($requestVars, '', "\n"),
+                            'RequestBody' => $request->getBody()
+                        )
+                    );
 
                 }
 
@@ -322,19 +291,75 @@ class HeydayXhprof
 
         } else {
 
-            user_error( 'Xhprof extension not loaded' );
+            user_error('Xhprof extension not loaded');
 
         }
 
     }
 
     /**
-     * Return default flags, if they don't exists then set some reasonable alternatives.
+     * Get the current request as a SS_HTTPRequest object
+     * 
+     * @return SS_HTTPRequest Request built from current request information
      */
-    public static function get_default_flags()
+    protected static function getRequest()
     {
 
-        if ( self::$default_flags === false ) {
+        //Copied from Director::direct
+        if (isset($_GET['url'])) {
+
+            $url = $_GET['url'];
+
+            // IIS includes get variables in url
+            $position = strpos($url, '?');
+
+            if ($position !== false) {
+
+                $url = substr($url, 0, $position);
+
+            }
+        
+        } else { // Lighttpd uses this
+
+            if (strpos($_SERVER['REQUEST_URI'], '?') !== false) {
+
+                list($url, $query) = explode('?', $_SERVER['REQUEST_URI'], 2);
+
+                parse_str($query, $_GET);
+
+                if ( $_GET ) {
+
+                    $_REQUEST = array_merge((array) $_REQUEST, (array) $_GET);
+
+                }
+
+            } else {
+
+                $url = $_SERVER['REQUEST_URI'];
+
+            }
+
+        }
+
+        return new SS_HTTPRequest(
+            isset($_SERVER['X-HTTP-Method-Override']) ? $_SERVER['X-HTTP-Method-Override'] : $_SERVER['REQUEST_METHOD'],
+            $url,
+            $_GET,
+            array_merge((array) $_POST, (array) $_FILES),
+            @file_get_contents('php://input')
+        );
+
+    }
+
+    /**
+     * Return default flags, if they don't exists then set some reasonable alternatives.
+     * 
+     * @return int
+     */
+    public static function getDefaultFlags()
+    {
+
+        if (self::$default_flags === false) {
 
             self::$default_flags = XHPROF_FLAGS_CPU + XHPROF_FLAGS_MEMORY;
 
@@ -345,9 +370,13 @@ class HeydayXhprof
     }
 
     /**
-     * Set default flags for use in profiling
+     * [Set default flags for use in profiling
+     * 
+     * @param int $flags Flags to set
+     * 
+     * @return null
      */
-    public static function set_default_flags( $flags )
+    public static function setDefaultFlags($flags)
     {
 
         self::$default_flags = $flags;
@@ -356,8 +385,10 @@ class HeydayXhprof
 
     /**
      * Get the app name for profile saving, if it doesn't exist then set it the SilverStripe project name
+     * 
+     * @return string The app name
      */
-    public static function get_app_name()
+    public static function getAppName()
     {
 
         if ( self::$app_name == false ) {
@@ -374,8 +405,12 @@ class HeydayXhprof
 
     /**
      * Set the app name for profile saving and run saving.
+     * 
+     * @param string $app_name App name to set
+     * 
+     * @return null
      */
-    public static function set_app_name( $app_name )
+    public static function setAppName($app_name)
     {
 
         self::$app_name = $app_name;
@@ -384,8 +419,10 @@ class HeydayXhprof
 
     /**
      * Tests if profiling has been started
+     * 
+     * @return boolean Started
      */
-    public static function is_started()
+    public static function isStarted()
     {
 
         return self::$started;
@@ -394,23 +431,27 @@ class HeydayXhprof
 
     /**
      * Remove any HeydayXhprofRuns if the corresponding profile is missing from the `tmp` directory.
+     * 
+     * @param int $appID App id
+     * 
+     * @return null
      */
-    public static function remove_missing( $appID = null )
+    public static function removeMissing($appID = null)
     {
 
-        $dir = realpath( ini_get( 'xhprof.output_dir' ) );
+        $dir = realpath(ini_get('xhprof.output_dir'));
 
-        if ( $dir ) {
+        if ($dir) {
 
-            $runs = $appID ? DataObject::get( 'HeydayXhprofRun', "AppID = '$appID'" ) : DataObject::get( 'HeydayXhprofRun' );
+            $runs = $appID ? DataObject::get('HeydayXhprofRun', "AppID = '$appID'") : DataObject::get('HeydayXhprofRun');
 
-            if ( $runs instanceof DataObjectSet ) {
+            if ($runs instanceof DataObjectSet) {
 
-                foreach ( $runs as $run ) {
+                foreach ($runs as $run) {
 
                     $filename = $dir . '/' . $run->Run . '.' . $run->App()->SafeName();
 
-                    if ( !file_exists( $filename ) ) {
+                    if (!file_exists($filename)) {
 
                         $run->delete();
 

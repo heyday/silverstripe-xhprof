@@ -90,7 +90,7 @@ This example would make the probability of a profile being made `1 in 1000`
 
 	//Code to profile
 	
-	if ( HeydayXhprof::is_started() ) {
+	if ( HeydayXhprof::isStarted() ) {
 
 		HeydayXhprof::end();
 	

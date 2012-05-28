@@ -6,9 +6,9 @@ class HeydayXhprofTest extends SapphireTest
     public function testAppName()
     {
 
-        HeydayXhprof::set_app_name('Something');
+        HeydayXhprof::setAppName('Something');
 
-        $this->assertEquals( 'Something', HeydayXhprof::get_app_name() );
+        $this->assertEquals( 'Something', HeydayXhprof::getAppName() );
 
     }
 
@@ -17,13 +17,13 @@ class HeydayXhprofTest extends SapphireTest
 
         HeydayXhprof::start( 'Start' );
 
-        $this->assertEquals( 'Start', HeydayXhprof::get_app_name() );
+        $this->assertEquals( 'Start', HeydayXhprof::getAppName() );
 
-        $this->assertTrue( HeydayXhprof::is_started() );
+        $this->assertTrue( HeydayXhprof::isStarted() );
 
         HeydayXhprof::end();
 
-        $this->assertFalse( HeydayXhprof::is_started() );
+        $this->assertFalse( HeydayXhprof::isStarted() );
 
         $app = DataObject::get_one( 'HeydayXhprofApp', "Name = 'Start'" );
 
@@ -73,6 +73,7 @@ class HeydayXhprofTest extends SapphireTest
 
         function run()
         {
+            
             $sum = 0;
             $tot = 100000;
 

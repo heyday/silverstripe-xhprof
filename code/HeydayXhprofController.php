@@ -40,7 +40,7 @@ class HeydayXhprofController extends Controller
     public function removemissing( $request )
     {
 
-        HeydayXhprof::remove_missing( $request->param( 'ID' ) ? $request->param( 'ID' ) : null );
+        HeydayXhprof::removeMissing( $request->param( 'ID' ) ? $request->param( 'ID' ) : null );
 
         Director::redirectBack();
 
