@@ -1,22 +1,55 @@
 <?php
+/**
+ * HeydayXhprofApp
+ *
+ * @category SilverStripe_Module
+ * @package  Heyday
+ * @author   Cam Spiers <cameron@heyday.co.nz>
+ * @license  http://www.opensource.org/licenses/MIT MIT
+ * @link     http://heyday.co.nz
+ */
 
+/**
+ * HeydayXhprofApp stores apps in the database.
+ * 
+ * @category SilverStripe_Module
+ * @package  Heyday
+ * @author   Cam Spiers <cameron@heyday.co.nz>
+ * @license  http://www.opensource.org/licenses/MIT MIT
+ * @link     http://heyday.co.nz
+ */
 class HeydayXhprofApp extends DataObject
 {
 
+    /**
+     * Database fields
+     * @var array
+     */
     public static $db = array(
         'Name' => 'Varchar(255)'
     );
 
+    /**
+     * Many many fields
+     * @var array
+     */
     public static $has_many = array(
         'Runs' => 'HeydayXhprofRun'
     );
 
-    public static function get( $appName )
+    /**
+     * Get an existing app by name, if it doesn't exist then create it.
+     * 
+     * @param string $appName App name
+     * 
+     * @return HeydayXhprofApp
+     */
+    public static function get($appName)
     {
 
-        $obj = DataObject::get_one( 'HeydayXhprofApp', "Name = '$appName'" );
+        $obj = DataObject::get_one('HeydayXhprofApp', "Name = '$appName'");
 
-        if ( !$obj instanceof self ) {
+        if (!$obj instanceof self) {
 
             $obj = new self;
 
@@ -30,53 +63,65 @@ class HeydayXhprofApp extends DataObject
 
     }
 
+    /**
+     * Get the fields for this type of model
+     * 
+     * @return FieldSet
+     */
     public function getCMSFields()
     {
 
         $fields = new FieldSet(
             new TabSet(
                 'Root',
-                new Tab( 'Main' )
+                new Tab('Main')
             )
         );
 
-        $fields->addFieldToTab( 'Root.Main', new LiteralField( 'RemoveMissing', "<p><button class='action'><a href='/xhprof/removemissing/$this->ID' style='color: inherit; text-decoration: inherit;'>Remove records with missing profile dumps</a></button><p>" ) );
+        $fields->addFieldToTab('Root.Main', new LiteralField('RemoveMissing', "<p><button class='action'><a href='/xhprof/removemissing/$this->ID' style='color: inherit; text-decoration: inherit;'>Remove records with missing profile dumps</a></button><p>"));
 
-        $fields->addFieldToTab( 'Root.Main', $runs = new TableListField(
-            'Runs',
-            'HeydayXhprofRun',
-            array(
-                'View' => 'View',
-                'Created' => 'Created',
-                'Url' => 'Url',
-                'Run' => 'Run ID',
-                'Method' => 'Method',
-                'IP' => 'IP',
-                'Params' => 'Params',
-                'RequestVars' => 'RequestVars',
-                'RequestBody' => 'RequestBody'
-            ),
-            "AppID = '$this->ID'"
-        ) );
+        $fields->addFieldToTab(
+            'Root.Main', $runs = new TableListField(
+                'Runs',
+                'HeydayXhprofRun',
+                array(
+                    'View' => 'View',
+                    'Created' => 'Created',
+                    'Url' => 'Url',
+                    'Run' => 'Run ID',
+                    'Method' => 'Method',
+                    'IP' => 'IP',
+                    'Params' => 'Params',
+                    'RequestVars' => 'RequestVars',
+                    'RequestBody' => 'RequestBody'
+                ),
+                "AppID = '$this->ID'"
+            )
+        );
 
-        $runs->setShowPagination( true );
+        $runs->setShowPagination(true);
 
         return $fields;
 
     }
 
-    public function SafeName()
+    /**
+     * Returns a name safe for use in urls and filenames
+     * 
+     * @return string
+     */
+    public function safeName()
     {
 
-        $t = ( function_exists( 'mb_strtolower' ) ) ? mb_strtolower( $this->Name ) : strtolower( $this->Name );
-        $t = Object::create( 'Transliterator' )->toASCII( $t );
-        $t = str_replace( '&amp;', '-and-', $t );
-        $t = str_replace( '&', '-and-', $t );
-        $t = ereg_replace( '[^A-Za-z0-9]+', '-', $t );
-        $t = ereg_replace( '-+', '-', $t );
-        $t = trim( $t, '-' );
+        $safeName = function_exists('mb_strtolower') ? mb_strtolower($this->Name) : strtolower($this->Name);
+        $safeName = Object::create('Transliterator')->toASCII($safeName);
+        $safeName = str_replace('&amp;', '-and-', $safeName);
+        $safeName = str_replace('&', '-and-', $safeName);
+        $safeName = ereg_replace('[^A-Za-z0-9]+', '-', $safeName);
+        $safeName = ereg_replace('-+', '-', $safeName);
+        $safeName = trim($safeName, '-');
 
-        return $t;
+        return $safeName;
 
     }
 

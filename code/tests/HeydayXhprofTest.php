@@ -28,7 +28,7 @@ class HeydayXhprofTest extends SapphireTest
         $app = DataObject::get_one( 'HeydayXhprofApp', "Name = 'Start'" );
 
         $this->assertTrue( $app instanceof HeydayXhprofApp );
-        $this->assertEquals( $app->SafeName(), 'start' );
+        $this->assertEquals( $app->safeName(), 'start' );
 
         $runs = $app->Runs();
 
@@ -40,7 +40,7 @@ class HeydayXhprofTest extends SapphireTest
 
         $app = DataObject::get_one( 'HeydayXhprofApp', "Name = 'New Start Something'" );
         $this->assertTrue( $app instanceof HeydayXhprofApp );
-        $this->assertEquals( $app->SafeName(), 'new-start-something' );
+        $this->assertEquals( $app->safeName(), 'new-start-something' );
 
         $apps = DataObject::get( 'HeydayXhprofApp' );
 

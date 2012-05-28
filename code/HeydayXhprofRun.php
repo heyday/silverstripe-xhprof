@@ -23,7 +23,7 @@ class HeydayXhprofRun extends DataObject
     {
 
         return <<<LINK
-<a href="/heyday-xhprof/code/ThirdParty/xhprof_html/index.php?run=$this->Run&source={$this->App()->SafeName()}&sort=wt" target="_blank">View</a>
+<a href="/heyday-xhprof/code/ThirdParty/xhprof_html/index.php?run=$this->Run&source={$this->App()->safeName()}&sort=wt" target="_blank">View</a>
 LINK;
 
     }
