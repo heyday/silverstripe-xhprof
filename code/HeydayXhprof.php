@@ -256,7 +256,7 @@ class HeydayXhprof
 
             $xhprof_runs = new XHProfRuns_Default();
 
-            $run_id = $xhprof_runs->save_run($xhprof_data, $app->SafeName());
+            $run_id = $xhprof_runs->save_run($xhprof_data, $app->safeName());
 
             if (class_exists('ClassInfo') && ClassInfo::exists('HeydayXhprofRun')) {
 
@@ -448,7 +448,7 @@ class HeydayXhprof
 
                 foreach ($runs as $run) {
 
-                    $filename = $dir . '/' . $run->Run . '.' . $run->App()->SafeName();
+                    $filename = $dir . '/' . $run->Run . '.' . $run->App()->safeName();
 
                     if (!file_exists($filename)) {
 
