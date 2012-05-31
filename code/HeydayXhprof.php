@@ -10,7 +10,8 @@
  */
 
 /**
- * HeydayXhprof acts as a wrapper to `xhprof` providing useful tools for starting and stopping `xhprof` profiling.
+ * HeydayXhprof acts as a wrapper to `xhprof` providing useful tools for 
+ * starting and stopping `xhprof` profiling.
  *
  * @category SilverStripe_Module
  * @package  Heyday
@@ -25,7 +26,8 @@ class HeydayXhprof
      */
     protected static $default_flags = false;
     /**
-     * Stores the "app name"/profile name. Used in profile saving and `HeydayXhprofRun` saving.
+     * Stores the "app name"/profile name. Used in profile saving and
+     * `HeydayXhprofRun` saving.
      */
     protected static $app_name = false;
     /**
@@ -46,7 +48,8 @@ class HeydayXhprof
     /**
      * Set the probability for profiling under load
      *
-     * @param int $probability The probability to be set. Should be a from 0 to 1 inclusive
+     * @param int $probability The probability to be set.
+     * Should be a from 0 to 1 inclusive
      *
      * @return null
      */
@@ -116,7 +119,8 @@ class HeydayXhprof
     /**
      * Add an array of urls for exclusion.
      *
-     * @param array $exclusions An array of exclusions to be merged on to the exclusions list
+     * @param array $exclusions An array of exclusions to be merged on
+     * to the exclusions list
      *
      * @return null
      */
@@ -130,7 +134,8 @@ class HeydayXhprof
     /**
      * Set exclusions
      *
-     * @param array $exclusions An array of exclusions to set to the exclusions list
+     * @param array $exclusions An array of exclusions to set to the
+     * exclusions list
      *
      * @return null
      */
@@ -156,7 +161,8 @@ class HeydayXhprof
     /**
      * Check is url is excluded
      *
-     * @param string $url A url to check if it is excluded by the exclusions list
+     * @param string $url A url to check if it is excluded by the
+     * exclusions list
      *
      * @return bool
      */
@@ -178,9 +184,11 @@ class HeydayXhprof
     }
 
     /**
-     * Check if we are allowed to profile based on url. If allowed by url, test probability.
+     * Check if we are allowed to profile based on url. If allowed by url,
+     * test probability.
      *
-     * @param string $url A url to check if it is excluded by the exclusions list
+     * @param string $url A url to check if it is excluded by the
+     * exclusions list
      *
      * @return bool
      */
