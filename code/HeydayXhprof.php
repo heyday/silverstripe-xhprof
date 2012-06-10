@@ -166,7 +166,7 @@ class HeydayXhprof
      *
      * @return bool
      */
-    public function isExcluded($url)
+    public static function isExcluded($url)
     {
 
         foreach (self::$exclusions as $exclusion) {
