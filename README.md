@@ -47,13 +47,16 @@ When you disable global profiling your `.htaccess` file will be restored from th
 ###Local Profiling
 
 To profile a specific segment of code you need to first ensure global profiling is disabled, and then you need to set up the requisite `HeydayXhprof::start()` and `HeydayXhprof::end()` calls.
-	
-	HeydayXhprof::start('Potentially Troublesome Code');
 
-	//Code to profile
+```php
+<?php
+HeydayXhprof::start('Potentially Troublesome Code');
 
-	HeydayXhprof::end();
-	
+//Code to profile
+
+HeydayXhprof::end();
+```
+
 ##Viewing saved profiles
 
 For each profile made, there is a corresponding database record (`HeydayXhprofRun`) created. These database records store information about the request (url, query string etc) that the profiling occured on, and also the identifier to the profile.
@@ -75,39 +78,46 @@ When global profiling is enabled, this file (if it exists) is included before an
 ###Limiting global profiling by probability
 
 To limit requests profiled you can use a probability. This useful for profiling on live server under load.
-
-	HeydayXhprof::setProbability(2/3);
+```php
+<?php
+HeydayXhprof::setProbability(2/3);
+```
 	
 This example would make the probability of a profile being made `2 in 3`
-
-	HeydayXhprof::setProbability(1/1000);
+```php
+<?php
+HeydayXhprof::setProbability(1/1000);
+```
 
 This example would make the probability of a profile being made `1 in 1000`
 
 ###Limiting local profiling by probability
+```php
+<?php
+if (HeydayXhprof::testProbability(1/100)) {
 
-	if (HeydayXhprof::testProbability(1/100)) {
-	
-		HeydayXhprof::start('Potentially Troublesome Code');
-	
-	}
+	HeydayXhprof::start('Potentially Troublesome Code');
 
-	//Code to profile
-	
-	if (HeydayXhprof::isStarted()) {
+}
 
-		HeydayXhprof::end();
-	
-	}
-	
+//Code to profile
+
+if (HeydayXhprof::isStarted()) {
+
+	HeydayXhprof::end();
+
+}
+```	
 ###Excluding urls by partial matching (specifically strpos)
 
 To exclude certain urls:
-
-	HeydayXhprof::addExclusions(array(
-		'/admin/xhprof/',
-		'/Security/ping'
-	));
+```php
+<?php
+HeydayXhprof::addExclusions(array(
+	'/admin/xhprof/',
+	'/Security/ping'
+));
+```
 
 ##Unit Testing
 
