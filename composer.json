@@ -1,5 +1,5 @@
 {
-    "name": "heyday/silvrstripe-xhprof",
+    "name": "heyday/silverstripe-xhprof",
     "type": "silverstripe-module",
     "require": {
         "composer/installers": "*"
