@@ -47,13 +47,15 @@ When you disable global profiling your `.htaccess` file will be restored from th
 ###Local Profiling
 
 To profile a specific segment of code you need to first ensure global profiling is disabled, and then you need to set up the requisite `HeydayXhprof::start()` and `HeydayXhprof::end()` calls.
-	
-	HeydayXhprof::start('Potentially Troublesome Code');
 
-	//Code to profile
+```php
+HeydayXhprof::start('Potentially Troublesome Code');
 
-	HeydayXhprof::end();
-	
+//Code to profile
+
+HeydayXhprof::end();
+```
+
 ##Viewing saved profiles
 
 For each profile made, there is a corresponding database record (`HeydayXhprofRun`) created. These database records store information about the request (url, query string etc) that the profiling occured on, and also the identifier to the profile.
