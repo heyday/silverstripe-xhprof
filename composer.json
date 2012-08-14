@@ -1,0 +1,8 @@
+{
+    "name": "heyday/silvrstripe-xhprof",
+    "type": "silverstripe-module",
+    "require": {
+        "composer/installers": "*"
+    },
+    "minimum-stability": "dev"
+}
