@@ -103,7 +103,7 @@ class HeydayXhprofController extends Controller
     public function globalprofile($request)
     {
 
-        $backupFileName = BASE_PATH . '/heyday-xhprof/code/GlobalProfile/backup/backup.htaccess';
+        $backupFileName = XHPROF_BASE_PATH . '/code/GlobalProfile/backup/backup.htaccess';
         $htaccessFileName = BASE_PATH . '/.htaccess';
 
         switch ($request->param('ID')) {
