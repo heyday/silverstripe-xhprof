@@ -49,6 +49,7 @@ When you disable global profiling your `.htaccess` file will be restored from th
 To profile a specific segment of code you need to first ensure global profiling is disabled, and then you need to set up the requisite `HeydayXhprof::start()` and `HeydayXhprof::end()` calls.
 
 ```php
+<?php
 HeydayXhprof::start('Potentially Troublesome Code');
 
 //Code to profile
