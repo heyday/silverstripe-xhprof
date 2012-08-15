@@ -9,5 +9,5 @@ php_flag register_globals on
 	RewriteRule .* / [R=302,L]
 
 	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteRule heyday-xhprof/code/ThirdParty/xhprof_html/ heyday-xhprof/code/ThirdParty/xhprof_html/index.php?%{QUERY_STRING} [L]
+	RewriteRule silverstripe-xhprof/code/ThirdParty/xhprof_html/ silverstripe-xhprof/code/ThirdParty/xhprof_html/index.php?%{QUERY_STRING} [L]
 </IfModule>
