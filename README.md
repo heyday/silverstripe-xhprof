@@ -4,19 +4,19 @@ This module provides a SilverStripe-centric wrapper for the pecl package [xhprof
 
 ##License
 
-This project is licensed under an MIT license which can be found at `heyday-xhprof/LICENSE`
+This project is licensed under an MIT license which can be found at `silverstripe-xhprof/LICENSE`
 
 ##Requirements
 
-You will require [xhprof](http://pecl.php.net/package/xhprof) installed in php to use `heyday-xhprof`. In order to create call graphs through the `xhprof gui` you will also need [Graphviz](http://www.graphviz.org/).
+You will require [xhprof](http://pecl.php.net/package/xhprof) installed in php to use `silverstripe-xhprof`. In order to create call graphs through the `xhprof gui` you will also need [Graphviz](http://www.graphviz.org/).
 
 ##Installation
 
-To install drop the `heyday-xhprof` directory into your SilverStripe root and run `/dev/build?flush=1`.
+To install drop the `silverstripe-xhprof` directory into your SilverStripe root and run `/dev/build?flush=1`.
 
 ##How to use
 
-You can use `heyday-xhprof` in two ways. As a global profiler or as a profiler of specific segments of code. Please note, you can't do both global profiling and local profiling in the same request.
+You can use `silverstripe-xhprof` in two ways. As a global profiler or as a profiler of specific segments of code. Please note, you can't do both global profiling and local profiling in the same request.
 
 ###Global Profiling
 
@@ -40,7 +40,7 @@ Disable:
 
 	http://localhost/xhprof/globalprofile/disable
 	
-Enabling global profiling edits your `.htaccess` file by adding two lines of code to the beginning, but `heyday-xhprof` makes a backup of your `.htaccess` which can be found in `heyday-xhprof/code/GlobalProfile/backup/`.
+Enabling global profiling edits your `.htaccess` file by adding two lines of code to the beginning, but `silverstripe-xhprof` makes a backup of your `.htaccess` which can be found in `silverstripe-xhprof/code/GlobalProfile/backup/`.
 
 When you disable global profiling your `.htaccess` file will be restored from the backup.
 	
@@ -121,18 +121,18 @@ HeydayXhprof::addExclusions(array(
 
 ##Unit Testing
 
-If you have `phpunit` installed you can run `heyday-xhprof`'s unit tests to see if everything is functioning correctly.
+If you have `phpunit` installed you can run `silverstripe-xhprof`'s unit tests to see if everything is functioning correctly.
 
 ###Running the unit tests
 
 From the command line:
 	
-	./sake dev/tests/module/heyday-xhprof
+	./sake dev/tests/module/silverstripe-xhprof
 
 
 From your browser:
 
-	http://localhost/dev/tests/module/heyday-xhprof
+	http://localhost/dev/tests/module/silverstripe-xhprof
 
 ##Contributing
 
