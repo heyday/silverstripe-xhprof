@@ -8,52 +8,52 @@ class HeydayXhprofTest extends SapphireTest
 
         HeydayXhprof::setAppName('Something');
 
-        $this->assertEquals( 'Something', HeydayXhprof::getAppName() );
+        $this->assertEquals('Something', HeydayXhprof::getAppName());
 
     }
 
     public function testStartEnd()
     {
 
-        HeydayXhprof::start( 'Start' );
+        HeydayXhprof::start('Start');
 
-        $this->assertEquals( 'Start', HeydayXhprof::getAppName() );
+        $this->assertEquals('Start', HeydayXhprof::getAppName());
 
-        $this->assertTrue( HeydayXhprof::isStarted() );
+        $this->assertTrue(HeydayXhprof::isStarted());
 
         HeydayXhprof::end();
 
-        $this->assertFalse( HeydayXhprof::isStarted() );
+        $this->assertFalse(HeydayXhprof::isStarted());
 
-        $app = DataObject::get_one( 'HeydayXhprofApp', "Name = 'Start'" );
+        $app = DataObject::get_one('HeydayXhprofApp', "Name = 'Start'");
 
-        $this->assertTrue( $app instanceof HeydayXhprofApp );
-        $this->assertEquals( $app->safeName(), 'start' );
+        $this->assertTrue($app instanceof HeydayXhprofApp);
+        $this->assertEquals($app->safeName(), 'start');
 
         $runs = $app->Runs();
 
-        $this->assertTrue( $runs instanceof DataObjectSet );
-        $this->assertTrue( $runs->First() instanceof HeydayXhprofRun );
+        $this->assertTrue($runs instanceof DataObjectSet);
+        $this->assertTrue($runs->First() instanceof HeydayXhprofRun);
 
-        HeydayXhprof::start( 'New Start Something' );
+        HeydayXhprof::start('New Start Something');
         HeydayXhprof::end();
 
-        $app = DataObject::get_one( 'HeydayXhprofApp', "Name = 'New Start Something'" );
-        $this->assertTrue( $app instanceof HeydayXhprofApp );
-        $this->assertEquals( $app->safeName(), 'new-start-something' );
+        $app = DataObject::get_one('HeydayXhprofApp', "Name = 'New Start Something'");
+        $this->assertTrue($app instanceof HeydayXhprofApp);
+        $this->assertEquals($app->safeName(), 'new-start-something');
 
-        $apps = DataObject::get( 'HeydayXhprofApp' );
+        $apps = DataObject::get('HeydayXhprofApp');
 
-        $this->assertEquals( count($apps), 2 );
+        $this->assertEquals(count($apps), 2);
 
     }
 
     public function testProbability()
     {
 
-        HeydayXhprof::setProbability(1/10);
+        HeydayXhprof::setProbability(1 / 10);
 
-        $this->assertEquals(1/10, HeydayXhprof::getProbability());
+        $this->assertEquals(1 / 10, HeydayXhprof::getProbability());
 
         HeydayXhprof::setProbability(10);
 
@@ -79,7 +79,7 @@ class HeydayXhprofTest extends SapphireTest
 
             for ($i = 0; $i < $tot; $i++) {
 
-                if ( HeydayXhprof::testProbability() ) {
+                if (HeydayXhprof::testProbability()) {
 
                     $sum++;
 
@@ -87,33 +87,33 @@ class HeydayXhprofTest extends SapphireTest
 
             }
 
-            return round( $sum / $tot, 1 );
+            return round($sum / $tot, 1);
 
         }
 
-        HeydayXhprof::setProbability( 1 / 10 );
+        HeydayXhprof::setProbability(1 / 10);
 
-        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
+        $this->assertEquals(run(), round(HeydayXhprof::getProbability(), 1));
 
-        HeydayXhprof::setProbability( 1 / 100 );
+        HeydayXhprof::setProbability(1 / 100);
 
-        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
+        $this->assertEquals(run(), round(HeydayXhprof::getProbability(), 1));
 
-        HeydayXhprof::setProbability( 1 / 1000 );
+        HeydayXhprof::setProbability(1 / 1000);
 
-        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
+        $this->assertEquals(run(), round(HeydayXhprof::getProbability(), 1));
 
-        HeydayXhprof::setProbability( 1 / 2 );
+        HeydayXhprof::setProbability(1 / 2);
 
-        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
+        $this->assertEquals(run(), round(HeydayXhprof::getProbability(), 1));
 
-        HeydayXhprof::setProbability( 1 / 3 );
+        HeydayXhprof::setProbability(1 / 3);
 
-        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
+        $this->assertEquals(run(), round(HeydayXhprof::getProbability(), 1));
 
-        HeydayXhprof::setProbability( 2 / 3 );
+        HeydayXhprof::setProbability(2 / 3);
 
-        $this->assertEquals( run(), round( HeydayXhprof::getProbability(), 1 ) );
+        $this->assertEquals(run(), round(HeydayXhprof::getProbability(), 1));
 
     }
 
@@ -124,18 +124,18 @@ class HeydayXhprofTest extends SapphireTest
             'hello'
         );
 
-        HeydayXhprof::setExclusions( $exclusions );
+        HeydayXhprof::setExclusions($exclusions);
 
-        $this->assertEquals( $exclusions, HeydayXhprof::getExclusions() );
+        $this->assertEquals($exclusions, HeydayXhprof::getExclusions());
 
         $exclusions = array(
             'hello',
             'something'
         );
 
-        HeydayXhprof::addExclusion( 'something' );
+        HeydayXhprof::addExclusion('something');
 
-        $this->assertEquals( $exclusions, HeydayXhprof::getExclusions() );
+        $this->assertEquals($exclusions, HeydayXhprof::getExclusions());
 
         $exclusions = array(
             'hello',
@@ -147,22 +147,22 @@ class HeydayXhprofTest extends SapphireTest
             'bob'
         );
 
-        HeydayXhprof::addExclusions( $newExclusions );
+        HeydayXhprof::addExclusions($newExclusions);
 
-        $this->assertEquals( $exclusions, HeydayXhprof::getExclusions() );
+        $this->assertEquals($exclusions, HeydayXhprof::getExclusions());
 
-        $this->assertTrue( HeydayXhprof::isExcluded('bob') );
+        $this->assertTrue(HeydayXhprof::isExcluded('bob'));
 
-        $this->assertTrue( HeydayXhprof::isExcluded('hello') );
+        $this->assertTrue(HeydayXhprof::isExcluded('hello'));
 
-        $this->assertTrue( HeydayXhprof::isExcluded('Hello') );
+        $this->assertTrue(HeydayXhprof::isExcluded('Hello'));
 
-        $this->assertFalse( HeydayXhprof::isExcluded('barbie') );
+        $this->assertFalse(HeydayXhprof::isExcluded('barbie'));
 
         HeydayXhprof::setProbability(1);
 
-        $this->assertTrue( HeydayXhprof::isAllowed('barbie') );
-        $this->assertFalse( HeydayXhprof::isAllowed('/bob/') );
+        $this->assertTrue(HeydayXhprof::isAllowed('barbie'));
+        $this->assertFalse(HeydayXhprof::isAllowed('/bob/'));
 
     }
 

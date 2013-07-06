@@ -26,11 +26,11 @@ class HeydayXhprofRun extends DataObject
      * @var array
      */
     private static $db = array(
-        'Run' => 'Varchar(255)',
-        'Url' => 'Text',
-        'Method' => "Enum('GET,POST,PUT,DELETE','GET')",
-        'IP' => 'Varchar(64)',
-        'Params' => 'Text',
+        'Run'         => 'Varchar(255)',
+        'Url'         => 'Text',
+        'Method'      => "Enum('GET,POST,PUT,DELETE','GET')",
+        'IP'          => 'Varchar(64)',
+        'Params'      => 'Text',
         'RequestVars' => 'Text',
         'RequestBody' => 'Text'
     );
@@ -48,6 +48,18 @@ class HeydayXhprofRun extends DataObject
      * @var string
      */
     private static $default_sort = 'Created DESC';
+
+    private static $summary_fields = array(
+        'view'        => 'View',
+        'Created'     => 'Created',
+        'Url'         => 'Url',
+        'Run'         => 'Run ID',
+        'Method'      => 'Method',
+        'IP'          => 'IP',
+        'Params'      => 'Params',
+        'RequestVars' => 'RequestVars',
+        'RequestBody' => 'RequestBody'
+    );
 
     /**
      * Link for viewing run

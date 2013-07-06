@@ -25,7 +25,7 @@ class HeydayXhprofApp extends DataObject
      * Database fields
      * @var array
      */
-    public static $db = array(
+    private static $db = array(
         'Name' => 'Varchar(255)'
     );
 
@@ -33,7 +33,7 @@ class HeydayXhprofApp extends DataObject
      * Many many fields
      * @var array
      */
-    public static $has_many = array(
+    private static $has_many = array(
         'Runs' => 'HeydayXhprofRun'
     );
 
@@ -44,10 +44,9 @@ class HeydayXhprofApp extends DataObject
      *
      * @return HeydayXhprofApp
      */
-    public static function get($appName)
+    public static function getOne($appName)
     {
-
-        $obj = DataObject::get_one('HeydayXhprofApp', "Name = '$appName'");
+        $obj = self::get()->filter('Name', $appName)->First();
 
         if (!$obj instanceof self) {
 
@@ -60,7 +59,6 @@ class HeydayXhprofApp extends DataObject
         }
 
         return $obj;
-
     }
 
     /**
@@ -70,39 +68,14 @@ class HeydayXhprofApp extends DataObject
      */
     public function getCMSFields()
     {
-
-        $fields = new FieldSet(
-            new TabSet(
-                'Root',
-                new Tab('Main')
-            )
-        );
-
-        $fields->addFieldToTab('Root.Main', new LiteralField('RemoveMissing', "<p><button class='action'><a href='/xhprof/removemissing/$this->ID' style='color: inherit; text-decoration: inherit;'>Remove records with missing profile dumps</a></button><p>"));
+        $fields = parent::getCMSFields();
 
         $fields->addFieldToTab(
-            'Root.Main', $runs = new TableListField(
-                'Runs',
-                'HeydayXhprofRun',
-                array(
-                    'view' => 'View',
-                    'Created' => 'Created',
-                    'Url' => 'Url',
-                    'Run' => 'Run ID',
-                    'Method' => 'Method',
-                    'IP' => 'IP',
-                    'Params' => 'Params',
-                    'RequestVars' => 'RequestVars',
-                    'RequestBody' => 'RequestBody'
-                ),
-                "AppID = '$this->ID'"
-            )
+            'Root.Main',
+            new LiteralField('RemoveMissing', "<p><button class='action'><a href='/xhprof/removemissing/$this->ID' style='color: inherit; text-decoration: inherit;'>Remove records with missing profile dumps</a></button><p>")
         );
 
-        $runs->setShowPagination(true);
-
         return $fields;
-
     }
 
     /**
@@ -112,17 +85,7 @@ class HeydayXhprofApp extends DataObject
      */
     public function safeName()
     {
-
-        $safeName = function_exists('mb_strtolower') ? mb_strtolower($this->Name) : strtolower($this->Name);
-        $safeName = Object::create('Transliterator')->toASCII($safeName);
-        $safeName = str_replace('&amp;', '-and-', $safeName);
-        $safeName = str_replace('&', '-and-', $safeName);
-        $safeName = ereg_replace('[^A-Za-z0-9]+', '-', $safeName);
-        $safeName = ereg_replace('-+', '-', $safeName);
-        $safeName = trim($safeName, '-');
-
-        return $safeName;
-
+        return URLSegmentFilter::create()->filter($this->Name);
     }
 
 }

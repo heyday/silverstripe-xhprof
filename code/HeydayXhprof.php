@@ -49,15 +49,13 @@ class HeydayXhprof
      * Set the probability for profiling under load
      *
      * @param int $probability The probability to be set.
-     * Should be a from 0 to 1 inclusive
+     *                         Should be a from 0 to 1 inclusive
      *
      * @return null
      */
     public static function setProbability($probability)
     {
-
         self::$probability = round(max(min(1, $probability), 0), 6);
-
     }
 
     /**
@@ -68,7 +66,6 @@ class HeydayXhprof
     public static function getProbability()
     {
         return self::$probability;
-
     }
 
     /**
@@ -80,24 +77,17 @@ class HeydayXhprof
      */
     public static function testProbability($probability = null)
     {
-
         if ($probability) {
-
             self::setProbability($probability);
-
         }
 
         if (self::$probability) {
-
             $unit = pow(10, strlen(self::$probability));
 
             return mt_rand(1, $unit) <= self::$probability * $unit;
-
         } else {
             return false;
-
         }
-
     }
 
     /**
@@ -109,39 +99,33 @@ class HeydayXhprof
      */
     public static function addExclusion($exclusion)
     {
-
         self::$exclusions[] = $exclusion;
-
     }
 
     /**
      * Add an array of urls for exclusion.
      *
      * @param array $exclusions An array of exclusions to be merged on
-     * to the exclusions list
+     *                          to the exclusions list
      *
      * @return null
      */
     public static function addExclusions(array $exclusions)
     {
-
         self::$exclusions = array_merge(self::$exclusions, $exclusions);
-
     }
 
     /**
      * Set exclusions
      *
      * @param array $exclusions An array of exclusions to set to the
-     * exclusions list
+     *                          exclusions list
      *
      * @return null
      */
     public static function setExclusions(array $exclusions)
     {
-
         self::$exclusions = $exclusions;
-
     }
 
     /**
@@ -152,31 +136,25 @@ class HeydayXhprof
     public static function getExclusions()
     {
         return self::$exclusions;
-
     }
 
     /**
      * Check is url is excluded
      *
      * @param string $url A url to check if it is excluded by the
-     * exclusions list
+     *                    exclusions list
      *
      * @return bool
      */
     public static function isExcluded($url)
     {
-
         foreach (self::$exclusions as $exclusion) {
-
             if (stripos($url, $exclusion) !== false) {
                 return true;
-
             }
-
         }
 
         return false;
-
     }
 
     /**
@@ -184,7 +162,7 @@ class HeydayXhprof
      * test probability.
      *
      * @param string $url A url to check if it is excluded by the
-     * exclusions list
+     *                    exclusions list
      *
      * @return bool
      */
@@ -199,7 +177,7 @@ class HeydayXhprof
      *
      * @param boolean $app_name The "app name" for the profile save and Run save
      *
-     * @param boolean $flags Flags for xhprof_enable call
+     * @param boolean $flags    Flags for xhprof_enable call
      *
      * @return null
      */
@@ -213,9 +191,6 @@ class HeydayXhprof
                 user_error('You have already started xhprof');
 
             }
-
-            include_once __DIR__ . '/ThirdParty/xhprof_lib/utils/xhprof_lib.php';
-            include_once __DIR__ . '/ThirdParty/xhprof_lib/utils/xhprof_runs.php';
 
             xhprof_enable($flags !== false ? $flags : self::getDefaultFlags());
 
@@ -253,7 +228,7 @@ class HeydayXhprof
 
             $appName = self::getAppName();
 
-            $app = HeydayXhprofApp::get($appName);
+            $app = HeydayXhprofApp::getOne($appName);
 
             $xhprof_data = xhprof_disable();
 
@@ -272,12 +247,12 @@ class HeydayXhprof
 
                     $xhprofRun = new HeydayXhprofRun(
                         array(
-                            'Run' => $run_id,
-                            'AppID' => $app->ID,
-                            'Url' => $request->getURL(),
-                            'Method' => $request->httpMethod(),
-                            'IP' => $request->getIP(),
-                            'Params' => http_build_query($request->allParams(), '', "\n"),
+                            'Run'         => $run_id,
+                            'AppID'       => $app->ID,
+                            'Url'         => $request->getURL(),
+                            'Method'      => $request->httpMethod(),
+                            'IP'          => $request->getIP(),
+                            'Params'      => http_build_query($request->allParams(), '', "\n"),
                             'RequestVars' => http_build_query($requestVars, '', "\n"),
                             'RequestBody' => $request->getBody()
                         )
@@ -331,7 +306,7 @@ class HeydayXhprof
 
                 if ($_GET) {
 
-                    $_REQUEST = array_merge((array) $_REQUEST, (array) $_GET);
+                    $_REQUEST = array_merge((array)$_REQUEST, (array)$_GET);
 
                 }
 
@@ -347,7 +322,7 @@ class HeydayXhprof
             isset($_SERVER['X-HTTP-Method-Override']) ? $_SERVER['X-HTTP-Method-Override'] : $_SERVER['REQUEST_METHOD'],
             $url,
             $_GET,
-            array_merge((array) $_POST, (array) $_FILES),
+            array_merge((array)$_POST, (array)$_FILES),
             @file_get_contents('php://input')
         );
 
@@ -372,7 +347,7 @@ class HeydayXhprof
     }
 
     /**
-     * [Set default flags for use in profiling
+     * Set default flags for use in profiling
      *
      * @param int $flags Flags to set
      *
@@ -414,9 +389,7 @@ class HeydayXhprof
      */
     public static function setAppName($app_name)
     {
-
         self::$app_name = $app_name;
-
     }
 
     /**
@@ -427,7 +400,6 @@ class HeydayXhprof
     public static function isStarted()
     {
         return self::$started;
-
     }
 
     /**
@@ -444,19 +416,15 @@ class HeydayXhprof
 
         if ($dir) {
 
-            $runs = DataObject::get('HeydayXhprofRun', $appID ? "AppID = '$appID'" : null);
+            $runs = null === $appID ? HeydayXhprofRun::get() : HeydayXhprofRun::get()->filter('AppID', $appID);
 
-            if ($runs instanceof DataObjectSet) {
+            foreach ($runs as $run) {
 
-                foreach ($runs as $run) {
+                $filename = $dir . '/' . $run->Run . '.' . $run->App()->safeName();
 
-                    $filename = $dir . '/' . $run->Run . '.' . $run->App()->safeName();
+                if (!file_exists($filename)) {
 
-                    if (!file_exists($filename)) {
-
-                        $run->delete();
-
-                    }
+                    $run->delete();
 
                 }
 

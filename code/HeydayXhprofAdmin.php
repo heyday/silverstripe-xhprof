@@ -25,7 +25,7 @@ class HeydayXhprofAdmin extends ModelAdmin
      * List of models managed by this admin
      * @var array
      */
-    public static $managed_models = array(
+    private static $managed_models = array(
         'HeydayXhprofApp'
     );
 

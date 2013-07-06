@@ -102,28 +102,28 @@ class HeydayXhprofController extends Controller
 
         switch ($request->param('ID')) {
 
-        case 'disable':
-            if (file_exists($backupFileName)) {
-                unlink($htaccessFileName);
-                rename($backupFileName, $htaccessFileName);
+            case 'disable':
+                if (file_exists($backupFileName)) {
+                    unlink($htaccessFileName);
+                    rename($backupFileName, $htaccessFileName);
 
-                return 'Done' . PHP_EOL;
-            } else {
-                return "It appears that global profiling is not enabled as there is no backup file to restore from." . PHP_EOL;
-            }
-            break;
+                    return 'Done' . PHP_EOL;
+                } else {
+                    return "It appears that global profiling is not enabled as there is no backup file to restore from." . PHP_EOL;
+                }
+                break;
 
-        case 'enable':
-        default:
-            if (!file_exists($backupFileName)) {
-                rename($htaccessFileName, $backupFileName);
-                file_put_contents($htaccessFileName, $this->globalIncludes() . file_get_contents($backupFileName));
+            case 'enable':
+            default:
+                if (!file_exists($backupFileName)) {
+                    rename($htaccessFileName, $backupFileName);
+                    file_put_contents($htaccessFileName, $this->globalIncludes() . file_get_contents($backupFileName));
 
-                return 'Done' . PHP_EOL;
-            } else {
-                return "It appears that global profiling is already enabled as a backup file exists." . PHP_EOL;
-            }
-            break;
+                    return 'Done' . PHP_EOL;
+                } else {
+                    return "It appears that global profiling is already enabled as a backup file exists." . PHP_EOL;
+                }
+                break;
 
         }
 
