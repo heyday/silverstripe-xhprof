@@ -37,16 +37,12 @@ class HeydayXhprofController extends Controller
      */
     public function init()
     {
-
         if (!Director::is_cli() && !Permission::check('ADMIN')) {
-
             user_error('No access allowed');
             exit;
-
         }
 
         parent::init();
-
     }
 
     /**

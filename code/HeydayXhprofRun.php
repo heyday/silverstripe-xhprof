@@ -74,4 +74,20 @@ LINK;
 
     }
 
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
+
+        $fields->addFieldToTab(
+            'Root.Main',
+            new LiteralField(
+                'view',
+                $this->view()
+            ),
+            'Run'
+        );
+
+        return $fields;
+    }
+
 }

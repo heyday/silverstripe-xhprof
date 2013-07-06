@@ -2,6 +2,8 @@
 
 This module provides a SilverStripe-centric wrapper for the pecl package [xhprof](http://pecl.php.net/package/xhprof) and the [xhprof gui](https://github.com/facebook/xhprof).
 
+For a version compatible with SilverStripe `2.4` see the `1.0` branch.
+
 ##License
 
 This project is licensed under an MIT license which can be found at `silverstripe-xhprof/LICENSE`
@@ -29,7 +31,7 @@ Enable:
 Disable:
 
 	./sake xhprof/globalprofile/disable
-	
+
 ####Without sake (you need to have ADMIN privedges)
 
 Enable:
@@ -39,11 +41,11 @@ Enable:
 Disable:
 
 	http://localhost/xhprof/globalprofile/disable
-	
+
 Enabling global profiling edits your `.htaccess` file by adding two lines of code to the beginning, but `silverstripe-xhprof` makes a backup of your `.htaccess` which can be found in `silverstripe-xhprof/code/GlobalProfile/backup/`.
 
 When you disable global profiling your `.htaccess` file will be restored from the backup.
-	
+
 ###Local Profiling
 
 To profile a specific segment of code you need to first ensure global profiling is disabled, and then you need to set up the requisite `HeydayXhprof::start()` and `HeydayXhprof::end()` calls.
@@ -64,17 +66,17 @@ For each profile made, there is a corresponding database record (`HeydayXhprofRu
 To view profiles saved go to:
 
 	http://localhost/admin/xhprof/
-	
+
 All global profiles are saved under the `App` name of `Global`.
-	
+
 ##Configuation
 
 There are a couple of configuation options available when profiling. Global config options can be set in a php file located at:
 
 	./mysite/_config_xhprof.php
-	
+
 When global profiling is enabled, this file (if it exists) is included before any `SilverStripe` code is included.
-	
+
 ###Limiting global profiling by probability
 
 To limit requests profiled you can use a probability. This useful for profiling on live server under load.
@@ -82,7 +84,7 @@ To limit requests profiled you can use a probability. This useful for profiling 
 <?php
 HeydayXhprof::setProbability(2/3);
 ```
-	
+
 This example would make the probability of a profile being made `2 in 3`
 ```php
 <?php
@@ -107,7 +109,7 @@ if (HeydayXhprof::isStarted()) {
 	HeydayXhprof::end();
 
 }
-```	
+```
 ###Excluding urls by partial matching (specifically strpos)
 
 To exclude certain urls:
@@ -126,7 +128,7 @@ If you have `phpunit` installed you can run `silverstripe-xhprof`'s unit tests t
 ###Running the unit tests
 
 From the command line:
-	
+
 	./sake dev/tests/module/silverstripe-xhprof
 
 
