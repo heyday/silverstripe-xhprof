@@ -1,0 +1,7 @@
+---
+Name: xhprof
+After:
+---
+Director:
+    rules:
+        xhprof//$Action/$ID/$OtherID: HeydayXhprofController

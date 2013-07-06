@@ -11,7 +11,7 @@
 
 /**
  * HeydayXhprofAdmin provides and admin interface for view `Apps` and `Runs`
- * 
+ *
  * @category SilverStripe_Module
  * @package  Heyday
  * @author   Cam Spiers <cameron@heyday.co.nz>

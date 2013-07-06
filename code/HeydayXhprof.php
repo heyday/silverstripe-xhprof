@@ -10,7 +10,7 @@
  */
 
 /**
- * HeydayXhprof acts as a wrapper to `xhprof` providing useful tools for 
+ * HeydayXhprof acts as a wrapper to `xhprof` providing useful tools for
  * starting and stopping `xhprof` profiling.
  *
  * @category SilverStripe_Module
@@ -62,12 +62,11 @@ class HeydayXhprof
 
     /**
      * Get Probability
-     * 
+     *
      * @return int
      */
     public static function getProbability()
     {
-
         return self::$probability;
 
     }
@@ -95,7 +94,6 @@ class HeydayXhprof
             return mt_rand(1, $unit) <= self::$probability * $unit;
 
         } else {
-
             return false;
 
         }
@@ -153,7 +151,6 @@ class HeydayXhprof
      */
     public static function getExclusions()
     {
-
         return self::$exclusions;
 
     }
@@ -172,7 +169,6 @@ class HeydayXhprof
         foreach (self::$exclusions as $exclusion) {
 
             if (stripos($url, $exclusion) !== false) {
-
                 return true;
 
             }
@@ -194,18 +190,17 @@ class HeydayXhprof
      */
     public static function isAllowed($url)
     {
-
         return !self::isExcluded($url) && self::testProbability();
 
     }
 
     /**
      * Start the profiling.
-     * 
+     *
      * @param boolean $app_name The "app name" for the profile save and Run save
-     * 
-     * @param boolean $flags    Flags for xhprof_enable call
-     * 
+     *
+     * @param boolean $flags Flags for xhprof_enable call
+     *
      * @return null
      */
     public static function start($app_name = false, $flags = false)
@@ -242,7 +237,7 @@ class HeydayXhprof
 
     /**
      * End the current profiling.
-     * 
+     *
      * @return null
      */
     public static function end()
@@ -306,7 +301,7 @@ class HeydayXhprof
 
     /**
      * Get the current request as a SS_HTTPRequest object
-     * 
+     *
      * @return SS_HTTPRequest Request built from current request information
      */
     protected static function getRequest()
@@ -325,7 +320,7 @@ class HeydayXhprof
                 $url = substr($url, 0, $position);
 
             }
-        
+
         } else { // Lighttpd uses this
 
             if (strpos($_SERVER['REQUEST_URI'], '?') !== false) {
@@ -360,7 +355,7 @@ class HeydayXhprof
 
     /**
      * Return default flags, if they don't exists then set some reasonable alternatives.
-     * 
+     *
      * @return int
      */
     public static function getDefaultFlags()
@@ -378,9 +373,9 @@ class HeydayXhprof
 
     /**
      * [Set default flags for use in profiling
-     * 
+     *
      * @param int $flags Flags to set
-     * 
+     *
      * @return null
      */
     public static function setDefaultFlags($flags)
@@ -392,7 +387,7 @@ class HeydayXhprof
 
     /**
      * Get the app name for profile saving, if it doesn't exist then set it the SilverStripe project name
-     * 
+     *
      * @return string The app name
      */
     public static function getAppName()
@@ -412,9 +407,9 @@ class HeydayXhprof
 
     /**
      * Set the app name for profile saving and run saving.
-     * 
+     *
      * @param string $app_name App name to set
-     * 
+     *
      * @return null
      */
     public static function setAppName($app_name)
@@ -426,21 +421,20 @@ class HeydayXhprof
 
     /**
      * Tests if profiling has been started
-     * 
+     *
      * @return boolean Started
      */
     public static function isStarted()
     {
-
         return self::$started;
 
     }
 
     /**
      * Remove any HeydayXhprofRuns if the corresponding profile is missing from the `tmp` directory.
-     * 
+     *
      * @param int $appID App id
-     * 
+     *
      * @return null
      */
     public static function removeMissing($appID = null)

@@ -11,7 +11,7 @@
 
 /**
  * HeydayXhprofController Provides sake callable actions for the xprof module
- * 
+ *
  * @category SilverStripe_Module
  * @package  Heyday
  * @author   Cam Spiers <cameron@heyday.co.nz>
@@ -20,12 +20,6 @@
  */
 class HeydayXhprofController extends Controller
 {
-
-    /**
-     * Url segment for the controller
-     * @var string
-     */
-    public static $url_segment = 'xhprof';
 
     /**
      * Allowed actions
@@ -38,7 +32,7 @@ class HeydayXhprofController extends Controller
 
     /**
      * Init method to check permissions
-     * 
+     *
      * @return null
      */
     public function init()
@@ -57,7 +51,7 @@ class HeydayXhprofController extends Controller
 
     /**
      * Lists available commands
-     * 
+     *
      * @return null
      */
     public function index()
@@ -79,9 +73,9 @@ class HeydayXhprofController extends Controller
 
     /**
      * Remove any runs where the profile is missing
-     * 
+     *
      * @param SS_HTTPRequest $request Request for action
-     * 
+     *
      * @return null
      */
     public function removemissing($request)
@@ -95,7 +89,7 @@ class HeydayXhprofController extends Controller
 
     /**
      * Enable or disable global profiling
-     * 
+     *
      * @param SS_HTTPRequest $request Request for action
      *
      * @return null
@@ -112,6 +106,7 @@ class HeydayXhprofController extends Controller
             if (file_exists($backupFileName)) {
                 unlink($htaccessFileName);
                 rename($backupFileName, $htaccessFileName);
+
                 return 'Done' . PHP_EOL;
             } else {
                 return "It appears that global profiling is not enabled as there is no backup file to restore from." . PHP_EOL;
@@ -123,6 +118,7 @@ class HeydayXhprofController extends Controller
             if (!file_exists($backupFileName)) {
                 rename($htaccessFileName, $backupFileName);
                 file_put_contents($htaccessFileName, $this->globalIncludes() . file_get_contents($backupFileName));
+
                 return 'Done' . PHP_EOL;
             } else {
                 return "It appears that global profiling is already enabled as a backup file exists." . PHP_EOL;
@@ -135,7 +131,7 @@ class HeydayXhprofController extends Controller
 
     /**
      * Gets content for .htaccess file based on project directory
-     * 
+     *
      * @return string
      */
     public function globalIncludes()

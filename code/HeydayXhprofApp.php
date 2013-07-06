@@ -11,7 +11,7 @@
 
 /**
  * HeydayXhprofApp stores apps in the database.
- * 
+ *
  * @category SilverStripe_Module
  * @package  Heyday
  * @author   Cam Spiers <cameron@heyday.co.nz>
@@ -39,9 +39,9 @@ class HeydayXhprofApp extends DataObject
 
     /**
      * Get an existing app by name, if it doesn't exist then create it.
-     * 
+     *
      * @param string $appName App name
-     * 
+     *
      * @return HeydayXhprofApp
      */
     public static function get($appName)
@@ -65,7 +65,7 @@ class HeydayXhprofApp extends DataObject
 
     /**
      * Get the fields for this type of model
-     * 
+     *
      * @return FieldSet
      */
     public function getCMSFields()
@@ -107,7 +107,7 @@ class HeydayXhprofApp extends DataObject
 
     /**
      * Returns a name safe for use in urls and filenames
-     * 
+     *
      * @return string
      */
     public function safeName()

@@ -73,11 +73,11 @@ class HeydayXhprofTest extends SapphireTest
 
         function run()
         {
-            
+
             $sum = 0;
             $tot = 100000;
 
-            for ( $i = 0; $i < $tot; $i++ ) {
+            for ($i = 0; $i < $tot; $i++) {
 
                 if ( HeydayXhprof::testProbability() ) {
 

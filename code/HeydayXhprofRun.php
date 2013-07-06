@@ -11,7 +11,7 @@
 
 /**
  * HeydayXhprofApp stores apps in the database.
- * 
+ *
  * @category SilverStripe_Module
  * @package  Heyday
  * @author   Cam Spiers <cameron@heyday.co.nz>
@@ -25,7 +25,7 @@ class HeydayXhprofRun extends DataObject
      * Database fields
      * @var array
      */
-    public static $db = array(
+    private static $db = array(
         'Run' => 'Varchar(255)',
         'Url' => 'Text',
         'Method' => "Enum('GET,POST,PUT,DELETE','GET')",
@@ -39,7 +39,7 @@ class HeydayXhprofRun extends DataObject
      * Has one fields
      * @var array
      */
-    public static $has_one = array(
+    private static $has_one = array(
         'App' => 'HeydayXhprofApp'
     );
 
@@ -47,18 +47,17 @@ class HeydayXhprofRun extends DataObject
      * Default way to sort
      * @var string
      */
-    public static $default_sort = 'Created DESC';
+    private static $default_sort = 'Created DESC';
 
     /**
      * Link for viewing run
-     * 
+     *
      * @return string
      */
     public function view()
     {
-
         return <<<LINK
-<a href="/silverstripe-xhprof/code/ThirdParty/xhprof_html/index.php?run=$this->Run&source={$this->App()->safeName()}&sort=wt" target="_blank">View</a>
+<a href="/vendor/facebook/xhprof/xhprof_html/index.php?run=$this->Run&source={$this->App()->safeName()}&sort=wt" target="_blank">View</a>
 LINK;
 
     }
