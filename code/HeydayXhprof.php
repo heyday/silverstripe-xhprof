@@ -1,4 +1,11 @@
 <?php
+
+if (file_exists(__DIR__.'/../../mysite/_config_xhprof.php')) {
+    require_once __DIR__.'/../../mysite/_config_xhprof.php';
+}
+
+require_once __DIR__.'/../../vendor/autoload.php';
+
 /**
  * HeydayXhprof
  *
@@ -21,6 +28,10 @@
  */
 class HeydayXhprof
 {
+    const LINK_MODE_NONE = 0;
+    const LINK_MODE_JS = 1;
+    const LINK_MODE_LINK = 2;
+
     /**
      * Stores default flags used in `xhprof_enable`
      */
@@ -39,11 +50,33 @@ class HeydayXhprof
      */
     protected static $probability = 1;
     /**
+     * @var int
+     */
+    protected static $link_mode = 0;
+    /**
      * Stores request url based exclusions
      */
     protected static $exclusions = array(
         'xhprof_html'
     );
+    /**
+     * @param int $link_mode
+     */
+    public static function setLinkMode($link_mode)
+    {
+        if (in_array($link_mode, array(self::LINK_MODE_NONE, self::LINK_MODE_JS, self::LINK_MODE_LINK))) {
+            self::$link_mode = $link_mode;
+        } else {
+            user_error('Unknown link mode');
+        }
+    }
+    /**
+     * @return int
+     */
+    public static function getLinkMode()
+    {
+        return self::$link_mode;
+    }
 
     /**
      * Set the probability for profiling under load
@@ -226,45 +259,31 @@ class HeydayXhprof
 
             }
 
-            $appName = self::getAppName();
-
-            $app = HeydayXhprofApp::getOne($appName);
-
-            $xhprof_data = xhprof_disable();
+            self::$started = false;
 
             $xhprof_runs = new XHProfRuns_Default();
 
-            $run_id = $xhprof_runs->save_run($xhprof_data, $app->safeName());
+            $run_id = $xhprof_runs->save_run(xhprof_disable(), self::getAppName());
 
-            if (class_exists('ClassInfo') && ClassInfo::exists('HeydayXhprofRun')) {
-
-                $request = self::getRequest();
-
-                if ($request instanceof SS_HTTPRequest) {
-
-                    $requestVars = $request->requestVars();
-                    unset($requestVars['url']);
-
-                    $xhprofRun = new HeydayXhprofRun(
-                        array(
-                            'Run'         => $run_id,
-                            'AppID'       => $app->ID,
-                            'Url'         => $request->getURL(),
-                            'Method'      => $request->httpMethod(),
-                            'IP'          => $request->getIP(),
-                            'Params'      => http_build_query($request->allParams(), '', "\n"),
-                            'RequestVars' => http_build_query($requestVars, '', "\n"),
-                            'RequestBody' => $request->getBody()
-                        )
+            switch (self::$link_mode) {
+                case self::LINK_MODE_NONE:
+                    break;
+                case self::LINK_MODE_JS:
+                    echo sprintf(
+                        <<<JSCRIPT
+                <script>
+var win = window.open('%s', '_blank');
+win.focus();
+</script>
+JSCRIPT
+                        ,
+                        self::getUrl($run_id)
                     );
-
-                }
-
+                    break;
+                case self::LINK_MODE_LINK:
+                    echo self::getLink($run_id);
+                    break;
             }
-
-            $xhprofRun->write();
-
-            self::$started = false;
 
         } else {
 
@@ -274,58 +293,21 @@ class HeydayXhprof
 
     }
 
-    /**
-     * Get the current request as a SS_HTTPRequest object
-     *
-     * @return SS_HTTPRequest Request built from current request information
-     */
-    protected static function getRequest()
+    public static function getLink($run_id)
     {
-
-        //Copied from Director::direct
-        if (isset($_GET['url'])) {
-
-            $url = $_GET['url'];
-
-            // IIS includes get variables in url
-            $position = strpos($url, '?');
-
-            if ($position !== false) {
-
-                $url = substr($url, 0, $position);
-
-            }
-
-        } else { // Lighttpd uses this
-
-            if (strpos($_SERVER['REQUEST_URI'], '?') !== false) {
-
-                list($url, $query) = explode('?', $_SERVER['REQUEST_URI'], 2);
-
-                parse_str($query, $_GET);
-
-                if ($_GET) {
-
-                    $_REQUEST = array_merge((array)$_REQUEST, (array)$_GET);
-
-                }
-
-            } else {
-
-                $url = $_SERVER['REQUEST_URI'];
-
-            }
-
-        }
-
-        return new SS_HTTPRequest(
-            isset($_SERVER['X-HTTP-Method-Override']) ? $_SERVER['X-HTTP-Method-Override'] : $_SERVER['REQUEST_METHOD'],
-            $url,
-            $_GET,
-            array_merge((array)$_POST, (array)$_FILES),
-            @file_get_contents('php://input')
+        return sprintf(
+            '<a href="%s" target="_blank">View xhprof run</a>',
+            self::getUrl($run_id)
         );
+    }
 
+    public static function getUrl($run_id)
+    {
+        return sprintf(
+            '/vendor/facebook/xhprof/xhprof_html/index.php?run=%s&source=%s&sort=wt',
+            $run_id,
+            self::getAppName()
+        );
     }
 
     /**
@@ -389,7 +371,7 @@ class HeydayXhprof
      */
     public static function setAppName($app_name)
     {
-        self::$app_name = $app_name;
+        self::$app_name = urlencode($app_name);
     }
 
     /**
@@ -400,38 +382,6 @@ class HeydayXhprof
     public static function isStarted()
     {
         return self::$started;
-    }
-
-    /**
-     * Remove any HeydayXhprofRuns if the corresponding profile is missing from the `tmp` directory.
-     *
-     * @param int $appID App id
-     *
-     * @return null
-     */
-    public static function removeMissing($appID = null)
-    {
-
-        $dir = realpath(ini_get('xhprof.output_dir'));
-
-        if ($dir) {
-
-            $runs = null === $appID ? HeydayXhprofRun::get() : HeydayXhprofRun::get()->filter('AppID', $appID);
-
-            foreach ($runs as $run) {
-
-                $filename = $dir . '/' . $run->Run . '.' . $run->App()->safeName();
-
-                if (!file_exists($filename)) {
-
-                    $run->delete();
-
-                }
-
-            }
-
-        }
-
     }
 
 }

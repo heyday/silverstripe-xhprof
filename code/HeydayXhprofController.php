@@ -68,22 +68,6 @@ class HeydayXhprofController extends Controller
     }
 
     /**
-     * Remove any runs where the profile is missing
-     *
-     * @param SS_HTTPRequest $request Request for action
-     *
-     * @return null
-     */
-    public function removemissing($request)
-    {
-
-        HeydayXhprof::removeMissing($request->param('ID') ? $request->param('ID') : null);
-
-        Director::redirectBack();
-
-    }
-
-    /**
      * Enable or disable global profiling
      *
      * @param SS_HTTPRequest $request Request for action
