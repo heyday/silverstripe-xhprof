@@ -26,8 +26,8 @@ class HeydayXhprofController extends Controller
      * @var array
      */
     public static $allowed_actions = array(
-        'globalprofile',
-        'removemissing'
+        'enable',
+        'disable'
     );
 
     /**
@@ -57,9 +57,8 @@ class HeydayXhprofController extends Controller
             PHP_EOL,
             array(
                 'Commands available:',
-                'sake xhprof/globalprofile/enable',
-                'sake xhprof/globalprofile/disable',
-                'sake xhprof/removemissingprofiles'
+                'sake xhprof/enable',
+                'sake xhprof/disable'
             )
         ), PHP_EOL;
 
@@ -74,40 +73,36 @@ class HeydayXhprofController extends Controller
      *
      * @return null
      */
-    public function globalprofile($request)
+    public function enable($request)
     {
-
         $backupFileName = XHPROF_BASE_PATH . '/code/GlobalProfile/backup/backup.htaccess';
         $htaccessFileName = BASE_PATH . '/.htaccess';
 
-        switch ($request->param('ID')) {
+		if (!file_exists($backupFileName)) {
+			rename($htaccessFileName, $backupFileName);
+			file_put_contents($htaccessFileName, $this->globalIncludes() . file_get_contents($backupFileName));
 
-            case 'disable':
-                if (file_exists($backupFileName)) {
-                    unlink($htaccessFileName);
-                    rename($backupFileName, $htaccessFileName);
-
-                    return 'Done' . PHP_EOL;
-                } else {
-                    return "It appears that global profiling is not enabled as there is no backup file to restore from." . PHP_EOL;
-                }
-                break;
-
-            case 'enable':
-            default:
-                if (!file_exists($backupFileName)) {
-                    rename($htaccessFileName, $backupFileName);
-                    file_put_contents($htaccessFileName, $this->globalIncludes() . file_get_contents($backupFileName));
-
-                    return 'Done' . PHP_EOL;
-                } else {
-                    return "It appears that global profiling is already enabled as a backup file exists." . PHP_EOL;
-                }
-                break;
-
-        }
+			return 'Done' . PHP_EOL;
+		} else {
+			return "It appears that global profiling is already enabled as a backup file exists." . PHP_EOL;
+		}
 
     }
+
+	public function disable()
+	{
+		$backupFileName = XHPROF_BASE_PATH . '/code/GlobalProfile/backup/backup.htaccess';
+		$htaccessFileName = BASE_PATH . '/.htaccess';
+
+		if (file_exists($backupFileName)) {
+			unlink($htaccessFileName);
+			rename($backupFileName, $htaccessFileName);
+
+			return 'Done' . PHP_EOL;
+		} else {
+			return "It appears that global profiling is not enabled as there is no backup file to restore from." . PHP_EOL;
+		}
+	}
 
     /**
      * Gets content for .htaccess file based on project directory
@@ -121,7 +116,6 @@ class HeydayXhprofController extends Controller
 
         return <<<HTACCESS
 php_value auto_prepend_file $dir/Start.php
-php_value auto_append_file $dir/End.php
 
 HTACCESS;
 

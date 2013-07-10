@@ -52,7 +52,7 @@ class HeydayXhprof
     /**
      * @var int
      */
-    protected static $link_mode = 0;
+    protected static $link_mode = 1;
     /**
      * Stores request url based exclusions
      */
@@ -227,6 +227,8 @@ class HeydayXhprof
 
             xhprof_enable($flags !== false ? $flags : self::getDefaultFlags());
 
+            register_shutdown_function(array(__CLASS__, 'end'));
+
             self::$started = true;
 
             if ($app_name) {
@@ -251,13 +253,7 @@ class HeydayXhprof
     public static function end()
     {
 
-        if (extension_loaded('xhprof')) {
-
-            if (!self::$started) {
-
-                user_error('You haven\'t started a profile');
-
-            }
+        if (extension_loaded('xhprof') && self::isStarted()) {
 
             self::$started = false;
 
@@ -271,12 +267,15 @@ class HeydayXhprof
                 case self::LINK_MODE_JS:
                     echo sprintf(
                         <<<JSCRIPT
-                <script>
-var win = window.open('%s', '_blank');
-win.focus();
+<script>
+var winName;
+if (winName = window.prompt('Specify a window for xhprof to open in', '_blank')) {
+    window.open('%s', winName).focus();
+}
 </script>
 JSCRIPT
                         ,
+                        self::getUrl($run_id),
                         self::getUrl($run_id)
                     );
                     break;
