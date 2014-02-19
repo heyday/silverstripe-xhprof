@@ -1,10 +1,8 @@
 <?php
 
-if (file_exists(__DIR__.'/../../mysite/_config_xhprof.php')) {
-    require_once __DIR__.'/../../mysite/_config_xhprof.php';
+if (file_exists(__DIR__ . '/../../mysite/_config_xhprof.php')) {
+    require_once __DIR__ . '/../../mysite/_config_xhprof.php';
 }
-
-require_once __DIR__.'/../../vendor/autoload.php';
 
 /**
  * HeydayXhprof
@@ -59,6 +57,7 @@ class HeydayXhprof
     protected static $exclusions = array(
         'xhprof_html'
     );
+
     /**
      * @param int $link_mode
      */
@@ -70,6 +69,7 @@ class HeydayXhprof
             user_error('Unknown link mode');
         }
     }
+
     /**
      * @return int
      */
@@ -210,7 +210,7 @@ class HeydayXhprof
      *
      * @param boolean $app_name The "app name" for the profile save and Run save
      *
-     * @param boolean $flags    Flags for xhprof_enable call
+     * @param boolean $flags Flags for xhprof_enable call
      *
      * @return null
      */

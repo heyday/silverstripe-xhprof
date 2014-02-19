@@ -1,8 +1,8 @@
 {
-    "name": "heyday/silverstripe-xhprof",
-    "type": "silverstripe-module",
-    "require": {
-        "composer/installers": "~1.0",
-        "facebook/xhprof": "dev-master"
-    }
+	"name": "heyday/silverstripe-xhprof",
+	"type": "silverstripe-module",
+	"require": {
+		"composer/installers": "~1.0",
+		"facebook/xhprof": "dev-master"
+	}
 }
