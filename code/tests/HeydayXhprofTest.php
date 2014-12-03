@@ -3,6 +3,11 @@
 class HeydayXhprofTest extends SapphireTest
 {
 
+    public function setUpOnce() {
+        HeydayXhprof::setLinkMode(HeydayXhprof::LINK_MODE_NONE);
+        parent::setUpOnce();
+    }
+
     public function testAppName()
     {
 
