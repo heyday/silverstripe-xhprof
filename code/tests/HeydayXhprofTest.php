@@ -12,42 +12,6 @@ class HeydayXhprofTest extends SapphireTest
 
     }
 
-    public function testStartEnd()
-    {
-
-        HeydayXhprof::start('Start');
-
-        $this->assertEquals('Start', HeydayXhprof::getAppName());
-
-        $this->assertTrue(HeydayXhprof::isStarted());
-
-        HeydayXhprof::end();
-
-        $this->assertFalse(HeydayXhprof::isStarted());
-
-        $app = DataObject::get_one('HeydayXhprofApp', "Name = 'Start'");
-
-        $this->assertTrue($app instanceof HeydayXhprofApp);
-        $this->assertEquals($app->safeName(), 'start');
-
-        $runs = $app->Runs();
-
-        $this->assertTrue($runs instanceof DataObjectSet);
-        $this->assertTrue($runs->First() instanceof HeydayXhprofRun);
-
-        HeydayXhprof::start('New Start Something');
-        HeydayXhprof::end();
-
-        $app = DataObject::get_one('HeydayXhprofApp', "Name = 'New Start Something'");
-        $this->assertTrue($app instanceof HeydayXhprofApp);
-        $this->assertEquals($app->safeName(), 'new-start-something');
-
-        $apps = DataObject::get('HeydayXhprofApp');
-
-        $this->assertEquals(count($apps), 2);
-
-    }
-
     public function testProbability()
     {
 
