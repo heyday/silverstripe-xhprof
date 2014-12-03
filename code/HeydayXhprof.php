@@ -246,14 +246,15 @@ class HeydayXhprof
     }
 
     /**
-     * End the current profiling.
+     * End the current profiling, if there's a current session.
+     * Otherwise, noop.
      *
      * @return null
      */
     public static function end()
     {
 
-        if (extension_loaded('xhprof') && self::isStarted()) {
+        if (self::isStarted()) {
 
             self::$started = false;
 
@@ -284,12 +285,7 @@ JSCRIPT
                     break;
             }
 
-        } else {
-
-            user_error('Xhprof extension not loaded');
-
         }
-
     }
 
     public static function getLink($run_id)
