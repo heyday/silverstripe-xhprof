@@ -50,8 +50,12 @@ class Controller extends BaseController
             exit;
         }
         if (strpos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false) {
-            Debug::dump('Not possible to enable/disable with Nginx, you need to manually add the below declaration into your config');
+            Debug::dump('Not possible to enable/disable with Nginx, you need to manually add the 2 below declarations into your config');
             Debug::dump(sprintf('fastcgi_param PHP_VALUE "auto_prepend_file=%s";', $this->getStartFileLocation()));
+            Debug::dump('location /vendor/lox/xhprof/xhprof_html/ {
+    try_files $uri /vendor/lox/xhprof/xhprof_html/index.php?$query_string;
+    allow 127.0.0.1;
+}');
             die();
         }
 
