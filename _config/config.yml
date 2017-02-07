@@ -2,6 +2,6 @@
 Name: xhprof
 After:
 ---
-Director:
-    rules:
-        xhprof//$Action/$ID/$OtherID: HeydayXhprofController
+SilverStripe\Control\Director:
+  rules:
+    xhprof//$Action/$ID/$OtherID: Heyday\Xhprof\Controller

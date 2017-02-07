@@ -303,7 +303,7 @@ JSCRIPT
     public static function getUrl($run_id)
     {
         return sprintf(
-            '/vendor/facebook/xhprof/xhprof_html/index.php?run=%s&source=%s&sort=wt',
+            '/vendor/lox/xhprof/xhprof_html/index.php?run=%s&source=%s&sort=wt',
             $run_id,
             self::getAppName()
         );
