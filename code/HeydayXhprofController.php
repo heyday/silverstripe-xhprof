@@ -1,4 +1,12 @@
 <?php
+
+namespace Heyday\Xhprof;
+
+use SilverStripe\Control\Controller As BaseController;
+use SilverStripe\Control\Director;
+use SilverStripe\Security\Permission;
+use SilverStripe\Dev\Debug;
+
 /**
  * HeydayXhprofController
  *
@@ -18,14 +26,14 @@
  * @license  http://www.opensource.org/licenses/MIT MIT
  * @link     http://heyday.co.nz
  */
-class HeydayXhprofController extends Controller
+class Controller extends BaseController
 {
 
     /**
      * Allowed actions
      * @var array
      */
-    public static $allowed_actions = array(
+    private static $allowed_actions = array(
         'enable',
         'disable'
     );
@@ -41,8 +49,22 @@ class HeydayXhprofController extends Controller
             user_error('No access allowed');
             exit;
         }
+        if (strpos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false) {
+            Debug::dump('Not possible to enable/disable with Nginx, you need to manually add the 2 below declarations into your config');
+            Debug::dump(sprintf('fastcgi_param PHP_VALUE "auto_prepend_file=%s";', $this->getStartFileLocation()));
+            Debug::dump('location /vendor/lox/xhprof/xhprof_html/ {
+    try_files $uri /vendor/lox/xhprof/xhprof_html/index.php?$query_string;
+    allow 127.0.0.1;
+}');
+            die();
+        }
 
         parent::init();
+    }
+
+    protected function getStartFileLocation()
+    {
+        return sprintf('%s/GlobalProfile/Start.php', dirname(__FILE__));
     }
 
     /**
@@ -77,7 +99,6 @@ class HeydayXhprofController extends Controller
     {
         $backupFileName = XHPROF_BASE_PATH . '/code/GlobalProfile/backup/backup.htaccess';
         $htaccessFileName = BASE_PATH . '/.htaccess';
-
         if (!file_exists($backupFileName)) {
             rename($htaccessFileName, $backupFileName);
             file_put_contents($htaccessFileName, $this->globalIncludes() . file_get_contents($backupFileName));

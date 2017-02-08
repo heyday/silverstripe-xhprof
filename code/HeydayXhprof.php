@@ -275,7 +275,6 @@ if (winName = window.prompt('Specify a window for xhprof to open in', '_blank'))
 </script>
 JSCRIPT
                         ,
-                        self::getUrl($run_id),
                         self::getUrl($run_id)
                     );
                     break;
@@ -303,7 +302,7 @@ JSCRIPT
     public static function getUrl($run_id)
     {
         return sprintf(
-            '/vendor/facebook/xhprof/xhprof_html/index.php?run=%s&source=%s&sort=wt',
+            '/vendor/lox/xhprof/xhprof_html/index.php?run=%s&source=%s&sort=wt',
             $run_id,
             self::getAppName()
         );

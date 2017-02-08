@@ -2,7 +2,7 @@
 	"name": "heyday/silverstripe-xhprof",
 	"type": "silverstripe-module",
 	"require": {
-		"composer/installers": "~1.0",
-		"facebook/xhprof": "dev-master"
+		"composer/installers": "~1.2.0",
+		"lox/xhprof": "dev-master"
 	}
 }
