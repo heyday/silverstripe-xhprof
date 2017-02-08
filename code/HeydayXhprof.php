@@ -275,7 +275,6 @@ if (winName = window.prompt('Specify a window for xhprof to open in', '_blank'))
 </script>
 JSCRIPT
                         ,
-                        self::getUrl($run_id),
                         self::getUrl($run_id)
                     );
                     break;
