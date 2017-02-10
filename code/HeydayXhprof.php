@@ -66,7 +66,7 @@ class HeydayXhprof
         if (in_array($link_mode, array(self::LINK_MODE_NONE, self::LINK_MODE_JS, self::LINK_MODE_LINK))) {
             self::$link_mode = $link_mode;
         } else {
-            user_error('Unknown link mode');
+            throw new InvalidArgumentException('Unknown link mode');
         }
     }
 
@@ -221,7 +221,7 @@ class HeydayXhprof
 
             if (self::$started) {
 
-                user_error('You have already started xhprof');
+                throw new LogicException('Already profiling - start() was already called');
 
             }
 
@@ -239,21 +239,22 @@ class HeydayXhprof
 
         } else {
 
-            user_error('Xhprof extension not loaded');
+            throw new Exception('Xhprof extension not loaded');
 
         }
 
     }
 
     /**
-     * End the current profiling.
+     * End the current profiling, if there's a current session.
+     * Otherwise, noop.
      *
      * @return null
      */
     public static function end()
     {
 
-        if (extension_loaded('xhprof') && self::isStarted()) {
+        if (self::isStarted()) {
 
             self::$started = false;
 
@@ -283,12 +284,7 @@ JSCRIPT
                     break;
             }
 
-        } else {
-
-            user_error('Xhprof extension not loaded');
-
         }
-
     }
 
     public static function getLink($run_id)

@@ -3,48 +3,17 @@
 class HeydayXhprofTest extends SapphireTest
 {
 
+    public function setUpOnce() {
+        HeydayXhprof::setLinkMode(HeydayXhprof::LINK_MODE_NONE);
+        parent::setUpOnce();
+    }
+
     public function testAppName()
     {
 
         HeydayXhprof::setAppName('Something');
 
         $this->assertEquals('Something', HeydayXhprof::getAppName());
-
-    }
-
-    public function testStartEnd()
-    {
-
-        HeydayXhprof::start('Start');
-
-        $this->assertEquals('Start', HeydayXhprof::getAppName());
-
-        $this->assertTrue(HeydayXhprof::isStarted());
-
-        HeydayXhprof::end();
-
-        $this->assertFalse(HeydayXhprof::isStarted());
-
-        $app = DataObject::get_one('HeydayXhprofApp', "Name = 'Start'");
-
-        $this->assertTrue($app instanceof HeydayXhprofApp);
-        $this->assertEquals($app->safeName(), 'start');
-
-        $runs = $app->Runs();
-
-        $this->assertTrue($runs instanceof DataObjectSet);
-        $this->assertTrue($runs->First() instanceof HeydayXhprofRun);
-
-        HeydayXhprof::start('New Start Something');
-        HeydayXhprof::end();
-
-        $app = DataObject::get_one('HeydayXhprofApp', "Name = 'New Start Something'");
-        $this->assertTrue($app instanceof HeydayXhprofApp);
-        $this->assertEquals($app->safeName(), 'new-start-something');
-
-        $apps = DataObject::get('HeydayXhprofApp');
-
-        $this->assertEquals(count($apps), 2);
 
     }
 
@@ -164,6 +133,39 @@ class HeydayXhprofTest extends SapphireTest
         $this->assertTrue(HeydayXhprof::isAllowed('barbie'));
         $this->assertFalse(HeydayXhprof::isAllowed('/bob/'));
 
+    }
+
+    /**
+     * You aren't able to nest profiles, so throw an exception to prevent this.
+     */
+    public function testStartNesting() {
+        HeydayXhprof::start();
+        try {
+            HeydayXhprof::start();
+        }
+        catch(LogicException $e) {
+            HeydayXhprof::end();
+            // Pass
+            return;
+        }
+        // Finally
+        if(HeydayXhprof::isStarted()) {
+            HeydayXhprof::end();
+        }
+        $this->fail('Starting to profile twice was incorrectly allowed');
+    }
+
+    /**
+     * When a developer explicitly ends the profiling session, the shutdown trigger
+     * that also calls ::end should exit cleanly and not produce errors.
+     */
+    public function testDoubleEnding() {
+        HeydayXhprof::start();
+        $this->assertTrue(HeydayXhprof::isStarted());
+        HeydayXhprof::end();
+        $this->assertFalse(HeydayXhprof::isStarted());
+        // No errors here please :)
+        HeydayXhprof::end();
     }
 
 }
